@@ -5,7 +5,21 @@ subtitle: |
       Apresentando a Estatística Bayesiana
 author: "Prof. Dr. Marcelo Ventura Freire (EACH/USP)"
 date: "16/03/2020"
-output: beamer_presentation
+output: 
+  beamer_presentation:
+      # keep_tex: yes
+      keep_tex: no
+header-includes:
+  - \usepackage{enumitem}
+  - \usepackage{tikzsymbols}
+  - \setlistdepth{20}
+  - \renewlist{itemize}{itemize}{20}
+  - \renewlist{enumerate}{enumerate}{20}
+  - \setlist[itemize]{label=$\cdot$}
+  - \setlist[itemize,1]{label=*}
+  - \setlist[itemize,2]{label=\textbullet}
+  - \setlist[itemize,3]{label=--}
+  - \setlist[itemize,4]{label=$\cdot$}
 ---
 
 ```{r setup, include=FALSE}
@@ -19,40 +33,56 @@ de guia introdutória de estudo e que apresente algum grau de profundidade dos
 fundamentos que dão base à Estatística Bayesiana, mas sem se pretender ser um
 tutorial.
 
-O tutorial fica para a próxima série. `r emo::ji_name["wink"]`
+O tutorial fica para a próxima série. $\Winkey$
+
+
 
 # Exemplos de aplicação
 
-## **PRÉ-ROTEIRIZAÇÃO**  -->  **Lembrar de tirar daqui**
+## **PRÉ-ROTEIRIZAÇÃO** $\longrightarrow$ **Lembrar de tirar daqui**
 
-- apresentação de 3 exemplos que motivarão e serão usados para ilustrar as lives 
-  seguintes
-  - para cada exemplo, apresentaremos uma situação em que é preciso apresentar 
-    - informação sobre o contexto da situação
-      - afinal, toda análise é estritamente condicionada no contexto de onde 
-        seus dados vieram
-        - quais conceitos e definições devem ser usados?
-        - quais pressuposições podem ser assumidas a respeito do que observamos?
-        - quais pressuposições podem ser assumidas a respeito do que *não* observamos?
-        - qual é a natureza dos dados com que vamos trabalhar?
-          - importa como, quando e em que ordem eles foram coletados?
-          - se sim, quais são as respostas a essas perguntas?
-      - em suma, não se faz análise em um vácuo de contexto (viu, ML e IA)
-    - qual é a necessidade de informação?
-      - algum aspecto essa situação é desconhecida
-      - quem precisa dessa informação?
-      - de qual informação essa pessoa precisa?
-      - qual o nível de detalhamento é necessário?
-    - dados observados
-      - apresentados parcial ou totalmente, em forma tabular 
-    - nome do método bayesiano adequado para lidar com o problema
-    - conclusão obtida para a necessidade de informação com a aplicação 
-      desse método nesses dados
-  - idealmente, os exemplos terão grau crescente de complexidade 
-    - simprão, simples e médio
-  - idealmente, serão exemplos vindos de áreas distintas
-    - ??saúde pública, marketing, engenharia ??
-  - idealmente, os métodos cobrirão tipos diferentes de dados
+Apresentação de 3 exemplos que motivarão e serão usados para ilustrar as _lives_ 
+seguintes. 
+
+- para cada exemplo, apresentaremos uma situação em que é preciso apresentar 
+  - informação sobre o contexto da situação
+    - afinal, toda análise é estritamente condicionada no contexto de onde 
+      seus dados vieram
+    - quais conceitos e definições devem ser usados?
+    - quais pressuposições podem ser assumidas a respeito 
+      - do que observamos?
+      - do que *não* observamos?
+    - qual é a natureza dos dados a serem trabalhados?
+      - importa como, quando e em que ordem eles foram coletados?
+      - se sim, quais são as respostas a essas perguntas?
+    - em suma, não se faz análise em um vácuo de contexto (viu, ML e IA)
+
+---
+
+- para cada exemplo, apresentaremos uma situação em que é preciso apresentar 
+  - qual é a necessidade de informação?
+    - algum aspecto essa situação é desconhecida
+    - quem precisa dessa informação?
+    - de qual informação essa pessoa precisa?
+    - qual o nível de detalhamento é necessário?
+  - dados observados
+    - apresentados parcial ou totalmente, em forma tabular 
+  - nome do método bayesiano adequado para lidar com o problema
+  - conclusão obtida para a necessidade de informação com a aplicação 
+    desse método nesses dados
+
+---
+
+- idealmente, os exemplos terão grau crescente de complexidade 
+  - simprão, simples e médio ?  
+  - sem difícil; nada de modelos hierárquicos ou de BSEM
+- idealmente, serão exemplos vindos de áreas distintas
+  - ?? saúde pública
+  - ?? marketing
+  - ?? engenharia
+- idealmente, os métodos cobrirão tipos diferentes de dados
+  - respostas dummy,contagem e contínua
+  - regressoras categóricas e quantitativas
 
 
 
@@ -86,8 +116,9 @@ O tutorial fica para a próxima série. `r emo::ji_name["wink"]`
 
 ## O que é Estatística Bayesiana?
 
-- é uma forma coerente de decidir em que escolher acreditar ou escolher como 
-  agir em face aos dados observados
+Respondendo de uma forma enganadoramente simples, _Estatística Bayesiana_ é uma 
+forma lógica e quantitativamente coerente de decidir em que escolher acreditar 
+ou escolher como agir em face aos dados observados
   
 ---
   
@@ -103,22 +134,13 @@ O tutorial fica para a próxima série. `r emo::ji_name["wink"]`
 - mais detalhadamente: 
   - crença inicial (chamada *probabilidade a priori*)
     - anterior à coleta dos dados
-    - vaga
-    - difusa
-    - imatura
-    - incerta
----
-- mais detalhadamente: 
+    - vaga, difusa, imatura e incerta
   - crença atualizada pelos dados (chamada *probabilidade a posteriori*)
     - posterior à coleta dos dados
-    - menos vaga
-    - mais concentrada
-    - mais madura
-    - menos incerta
----
+    - menos vaga, mais concentrada, mais madura e menos incerta
 - esse processo de atualização da crença em função dos dados observados será
   realizado através de um mecanismo chamado _Teorema de Bayes_,
-  tema da nossa **3a _live_**
+  tema da nossa **3^a^ _live_**
   
 ---
   
@@ -126,7 +148,7 @@ O tutorial fica para a próxima série. `r emo::ji_name["wink"]`
   de informação sobre a realidade; mas é preciso antes saber caracterizar
   quantitativamente o tipo de necessidade de informação para usar essa crença;
   é aqui que entram a _Teoria da Decisão_ e a _Inferência Bayesiana_,
-  temas da nossa **4a _live_**
+  temas da nossa **4^a^ _live_**
   
 ---
   
@@ -135,12 +157,12 @@ O tutorial fica para a próxima série. `r emo::ji_name["wink"]`
   de modo que é preciso usar outra forma de calcular as respostas 
   às necessidades de informações; nesse ponto, falaremos dos métodos 
   computacionais que permitirão chegar às respostas, 
-  o que será o tema da **5a _live_**
+  o que será o tema da **5^a^ _live_**
 
 ---
 
-- por fim, na nossa **6a e última _live_**, retomaremos os 3 exemplos 
-  da 1a _live_ e vamos realizar a análise completa para cada um:
+- por fim, na nossa **6^a^ e última _live_**, retomaremos os 3 exemplos 
+  desta 1^a^ _live_ e vamos realizar a análise completa para cada um:
   - modelar os dados a partir do contexto e necessidade de informação apresentados
   - usar os programas R e JAGS para encontrar a resposta Bayesiana
   - levar de volta essa resposta ao contexto original, interpretando-a
