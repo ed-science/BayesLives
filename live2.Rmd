@@ -4,7 +4,9 @@ subtitle: |
     _Live_ 2/6: 
       Probabilidade como Caracterização Quantitativa 
         de Escolha Racional de Crença
-author: "Prof. Dr. Marcelo Ventura Freire (EACH/USP)"
+author: |
+    Prof. Dr. Marcelo Ventura Freire (EACH/USP)
+    <https://github.com/zyxdef/BayesLives>
 date: "30/03/2020"
 output: 
   beamer_presentation:

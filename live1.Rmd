@@ -3,7 +3,9 @@ title: "Série _Introdução às Bases da Estatística Bayesiana_"
 subtitle: |
     _Live_ 1/6: 
       Apresentando a Estatística Bayesiana
-author: "Prof. Dr. Marcelo Ventura Freire (EACH/USP)"
+author: |
+    Prof. Dr. Marcelo Ventura Freire (EACH/USP)
+    <https://github.com/zyxdef/BayesLives>
 date: "16/03/2020"
 output: 
   beamer_presentation:
@@ -33,8 +35,9 @@ de guia introdutória de estudo e que apresente algum grau de profundidade dos
 fundamentos que dão base à Estatística Bayesiana, mas sem se pretender ser um
 tutorial.
 
-O tutorial fica para a próxima série. $\Winkey$
+- O tutorial fica para a próxima série. $\Winkey$
 
+- O repositório deste material está em <https://github.com/zyxdef/BayesLives>
 
 
 # Exemplos de aplicação

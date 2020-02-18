@@ -4,7 +4,9 @@ subtitle: |
     _Live_ 4/6: 
       Generalização dos Dados para a População -- 
         A Inferência Bayesiana
-author: "Prof. Dr. Marcelo Ventura Freire (EACH/USP)"
+author: |
+    Prof. Dr. Marcelo Ventura Freire (EACH/USP)
+    <https://github.com/zyxdef/BayesLives>
 date: "27/04/2020"
 output: 
   beamer_presentation:

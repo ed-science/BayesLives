@@ -3,7 +3,9 @@ title: "Série _Introdução às Bases da Estatística Bayesiana_"
 subtitle: |
     _Live_ 6/6: 
       Modelagem e Análise Bayesiana do Exemplos da Primeira _Live_
-author: "Prof. Dr. Marcelo Ventura Freire (EACH/USP)"
+author: |
+    Prof. Dr. Marcelo Ventura Freire (EACH/USP)
+    <https://github.com/zyxdef/BayesLives>
 date: "25/05/2020"
 output: 
   beamer_presentation:
@@ -26,7 +28,7 @@ header-includes:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## **PRÉ-ROTEIRIZAÇÃO** $\longrightarrow$ **retirar depois**
+  ## **PRÉ-ROTEIRIZAÇÃO** $\longrightarrow$ **retirar depois**
 
 - Exemplo 1
   - modelar os dados a partir do contexto e necessidade de informação apresentados
