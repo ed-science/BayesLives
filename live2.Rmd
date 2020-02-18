@@ -23,10 +23,211 @@ header-includes:
   - \setlist[itemize,4]{label=$\cdot$}
 ---
 
-
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## 
+## Probabilidade e as sua correntes filosóficas de interpretações
+
+- tentativas de caracterizar quantitativamente a incerteza
+- em muitas das culturas antigas, há esforços de sistematização do conceito,
+  cálculo e uso de probabailidade
+- em 1560, Gerolamo Cardano começou a investigação matemática de probabilidade 
+  a partir de problemas de jogos de azar
+- em 1713, Jacob Bernoulli apresentou a primeira tentativa de formalização
+  matemática da probabilidade
+- em 1933, a probabilidade teve sua formalização matemática finalmente resolvida
+  pelo matemático russo Andrei Kolmogoro
+- a Matemática por trás da Probabilidade é a mesma em todas as diferentes
+  correntes filosóficas de interpretação
+  - apenas sua interpretação ficou como tópico em aberto ao debate
+
+## Principais correntes filosóficas de interpretação de probabilidade
+
+Divididas em dois grupos 
+
+- interpretações epistemológicas: 
+  - probabilidades são inerentes ao conhecimento e à crença humanos enquanto 
+    processos cognitivos
+- interpretações objetivistas: 
+  - probabilidades são referentes à realidade e independem de processos 
+    cognitivo humanos
+
+## Interpretações epistemológicas
+
+Interpretação clássica de probabilidade
+
+- Bernoulli, Laplace e quase todos até o século 19
+- não existe aleatoriedade no universo determinístico: 
+  - não haveria nem incerteza e nem necessidade de medi-la através da 
+    probabilidade 
+    - se conseguíssemos medir tudo com precisão infinita
+
+Interpretação subjetivista de probabilidade
+
+- essa interpretação é a que fundamenta a Estatística Bayesiana
+- de Finetti, Jeffrey
+- aleatoriedade ser real ou não é irrelevante
+- probabilidade é o grau de crença mantida por um agente racional
+  - que atende ao axiomas de probabilidade (que veremos logo adiante) e 
+  - que atualiza suas crenças por condicionamento Bayesiano em face 
+    de novas evidências
+
+## Interpretações objetivistas
+
+- interpretação frequencista de probabilidade
+  - Venn, Reichenbach, von Mises
+  - probabilidade como limite da frequência relativa
+  - problema com eventos não repetíveis
+ - interpretação lógica (ou evidencial) de probabilidade
+  - Keynes, Jeffrey, Carnap
+  - tentativa de desenvolver uma lógica indutiva, em complementariedade 
+    à logica dedutiva tradicional
+- interpretação propensitivista de probabilidade
+  - Popper
+  - probabilidade como propensão de um dispositivo físico produzir 
+    resultados de certos tipos
+
+# Breve Introdução à Teoria da Probabilidade
+
+## Um pouco de linguajar: a axiomatização de Kolmogorov
+
+- axiomatização == formalização matemática
+- objetivo: apresentar para você, pela primeira vez na sua vida, algo que nunca
+  vão te apresentar em outro lugar
+  - "preciso realmente saber isso?"
+    - se você quiser saber Bayesiana, sim, pois 
+    - Não, não vai cair na prova; se não tiver interesse, avance o vídeo
+    - mas ele vão ser úteis quando a coisa engrossar dentro da discussão
+
+## Estrutura conceitual e elementos da formalização
+
+Conceitos
+
+- espaço de probabilidade
+  - espaço amostral
+  - sigma-álgebra
+  - medida de probabilidade
+- variável aleatória (v.a.)
+- função de distribuição (acumulada) (de probabilidade) de uma variável
+  aleatória
+- função de densidade (de probabilidade) de uma variável aleatória
+- função de massa (de probabilidade) de uma variável aleatória
+- expectância ou valor esperado de uma variável aleatória
+- expectância ou valor esperado de uma função de variável aleatória
+- variância de uma variável aleatória
+- variância de uma função de uma variável aleatória
+
+## Espaço de probabilidade
+
+O trio $(\Omega, \mathcal{F}, P)$
+
+- espaço amostral $\Omega$: 
+  - conjuntos de elementos ou valores individuais observaveis (chamados
+    *pontos amostrais* $\omega$)
+  - exemplos
+    - espaços numéricos: $\{1, 2, 3, 4, 5, 6\}$, $\mathbb{R}$
+    - espaços abstratos: polígonos, pessoas, sentimentos
+
+## Espaço de probabilidade
+
+- sigma-álgebra $\mathcal{F}$:
+  - conjunto dos *eventos* $E$ (subconjuntos de $\Omega$) cuja probabilidade 
+    se queira medir
+    - podem ser conjuntos unitários, só com os pontos amostrais individuais,
+    - mas também podem ser blocos ou faixas inteiras de pontos amostrais
+  - precisa conter $\Omega$: $\Omega\in\mathcal{F}$
+  - precisa ser fechado em relação a
+      - união enumerável: $\bigcup_{i=1}^\infty E_i\in\mathcal{F}$ 
+        para todo $E_1,E_2,E_3,...\in\mathcal{F}$
+      - complementação: $E^c\in\mathcal{F}$ para todo $E\in\mathcal{F}$
+
+## Espaço de probabilidade
+
+- medida de probabilidade $P$:
+  - é uma função $P:\mathcal{F} \to \mathbb{R}$ que leva os eventos $E$ de $\mathcal{F}$ a valores no intervalo $[0, 1]$
+  - é uma função não-negativa: $P(E)\ge 0$
+  - é uma função normalizada: $P(\Omega) = 1$
+  - é uma função enumeravelmente aditiva: 
+    $P(\bigcup_{i=1}^\infty E_i) = \sum_{i=1}^\infty P(E_i)$
+    para todo $E_i\in\mathcal{F}$, $i=1,2,3,...$ disjuntos aos pares 
+    $E_i\cap E_j=\emptyset$, $i\ne j$
+  - várias propriedade desejaveis da medida de probabilidade são
+    consequências dessa propriedade
+    - monotonicidade: $P(A)\le P(B)$ se $A\subset B$
+    - complemento: $P(E^C)=1-P(E)$
+    - união não exclusiva: $P(A\cup B)=P(A)+P(B)-P(A\cap B)$ 
+      para $A,B\in\mathcal{F}$
+
+## Variável aleatória
+
+Função $X$ que leva cada elemento $\omega$ do espaço amostral $\Omega$ em um 
+valor quantitativo uni ou multidimensional
+
+-  $X:\Omega\to\mathbb{R}$ ou  $X:\Omega\to\mathbb{R}^n$
+- pessoas $to$ estatura
+- pessoas $to$ peso
+- pessoas $to$ (estatura, peso)
+
+## **AINDA FALTA**
+
+- função de distribuição (acumulada) (de probabilidade) de uma variável
+  aleatória
+- função de densidade (de probabilidade) de uma variável aleatória
+- função de massa (de probabilidade) de uma variável aleatória
+- expectância ou valor esperado de uma variável aleatória
+- expectância ou valor esperado de uma função de variável aleatória
+- variância de uma variável aleatória
+- variância de uma função de uma variável aleatória
+
+
+# Cálculo de Probabilidade
+
+## Mas como calculamos probabilidades em si?
+
+Precisamos encontrar pressupostos que possam ser assumidos no contexto
+
+  - TODA probabilidade é condicional nas premissas que são assumidas; 
+  - se as premissas forem falsas, não é a probabilidade que está errada: ela
+    simplesmente não é a probabilidade que se aplica àquele caso
+
+Exemplos
+- simetria e equiprobabilidade
+  - arremesso de moeda cilindrica em superficie almofadada
+- E quando não há simetria? 
+  - arremesso de moeda chanfrada (tronco de cone) em superfície rígida (vai
+    quicar)
+  - arremesso de moeda imantada em campo magnético com intensidade em função 
+    de um controle
+
+## Regras de operações com probabilidades
+
+- com eventos
+  - regra da partição: $P(A) = P(A\cap B) + P(A\cap B^C)$
+  - regra do complemento: $P(A^C) = 1 - P(A)$
+  - regra da inclusão-exclusão: 
+    $P(A\cup B\cup C) = P(A) + P(B) + P(C) - P(A\cap B) - P(A\cap C) - P(B\cap C) + P(A\cap B\cap C)$
+  - ???
+- com variáveis aleatórias
+    - ???
+- ???
+
+# Modelos e distribuições de probabilidade
+
+## Modelos Discretos de Distribuição de Probabilidade
+
+- uniforme discreta
+- Bernoulli, binomial, binomial negativa
+- geométrica e hipergeométrica
+- Poisson
+- Zipf
+
+## Modelos Contínuos de Distribuição de Probabilidade
+
+- uniforme, beta, 
+- exponencial, gama
+- normal, qui quadrado, F de Snedecor, t de Student, log-normal
+- logistica
+
+
+
