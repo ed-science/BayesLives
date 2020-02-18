@@ -12,4 +12,135 @@ output: beamer_presentation
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## 
+## Objetivos desta série de _lives_
+
+O objetivos desta série de 6 _lives_ é dar uma visão panorâmica que possa servir 
+de guia introdutória de estudo e que apresente algum grau de profundidade dos 
+fundamentos que dão base à Estatística Bayesiana, mas sem se pretender ser um
+tutorial.
+
+O tutorial fica para a próxima série. `r emo::ji_name["wink"]`
+
+# Exemplos de aplicação
+
+## **PRÉ-ROTEIRIZAÇÃO**  -->  **Lembrar de tirar daqui**
+
+- apresentação de 3 exemplos que motivarão e serão usados para ilustrar as lives 
+  seguintes
+  - para cada exemplo, apresentaremos uma situação em que é preciso apresentar 
+    - informação sobre o contexto da situação
+      - afinal, toda análise é estritamente condicionada no contexto de onde 
+        seus dados vieram
+        - quais conceitos e definições devem ser usados?
+        - quais pressuposições podem ser assumidas a respeito do que observamos?
+        - quais pressuposições podem ser assumidas a respeito do que *não* observamos?
+        - qual é a natureza dos dados com que vamos trabalhar?
+          - importa como, quando e em que ordem eles foram coletados?
+          - se sim, quais são as respostas a essas perguntas?
+      - em suma, não se faz análise em um vácuo de contexto (viu, ML e IA)
+    - qual é a necessidade de informação?
+      - algum aspecto essa situação é desconhecida
+      - quem precisa dessa informação?
+      - de qual informação essa pessoa precisa?
+      - qual o nível de detalhamento é necessário?
+    - dados observados
+      - apresentados parcial ou totalmente, em forma tabular 
+    - nome do método bayesiano adequado para lidar com o problema
+    - conclusão obtida para a necessidade de informação com a aplicação 
+      desse método nesses dados
+  - idealmente, os exemplos terão grau crescente de complexidade 
+    - simprão, simples e médio
+  - idealmente, serão exemplos vindos de áreas distintas
+    - ??saúde pública, marketing, engenharia ??
+  - idealmente, os métodos cobrirão tipos diferentes de dados
+
+
+
+## Exemplo 1:
+
+- contexto da situação
+- necessidade de informação
+- dados observados
+- método adequado para lidar com o problema
+- conclusão obtida
+
+
+
+## Exemplo 2:
+  - contexto da situação
+  - necessidade de informação
+  - dados observados
+  - método adequado para lidar com o problema
+  - conclusão obtida
+
+
+
+## Exemplo 3:
+
+  - contexto da situação
+  - necessidade de informação
+  - dados observados
+  - método adequado para lidar com o problema
+  - conclusão obtida
+
+
+## O que é Estatística Bayesiana?
+
+- é uma forma coerente de decidir em que escolher acreditar ou escolher como 
+  agir em face aos dados observados
+  
+---
+  
+- a partir de um estado inicial de baixo conhecimento a respeito do fenômeno, 
+  assumir uma crença difusa a seu respeito, coletar observações e atualizar 
+  a crença de forma coerente em face ao que tiver sido observado
+- essa escolha racional de crença ou expectativa sobre a realidade será 
+  caracterizada quantitativamente na forma de *Probabilidade*, 
+  tema da nossa **2a _live_**
+
+---
+
+- mais detalhadamente: 
+  - crença inicial (chamada *probabilidade a priori*)
+    - anterior à coleta dos dados
+    - vaga
+    - difusa
+    - imatura
+    - incerta
+---
+- mais detalhadamente: 
+  - crença atualizada pelos dados (chamada *probabilidade a posteriori*)
+    - posterior à coleta dos dados
+    - menos vaga
+    - mais concentrada
+    - mais madura
+    - menos incerta
+---
+- esse processo de atualização da crença em função dos dados observados será
+  realizado através de um mecanismo chamado _Teorema de Bayes_,
+  tema da nossa **3a _live_**
+  
+---
+  
+- de posse dessa crença final, é possível começar a responder a necessidade
+  de informação sobre a realidade; mas é preciso antes saber caracterizar
+  quantitativamente o tipo de necessidade de informação para usar essa crença;
+  é aqui que entram a _Teoria da Decisão_ e a _Inferência Bayesiana_,
+  temas da nossa **4a _live_**
+  
+---
+  
+- exceto em raras situações triviais, não será possível encontrar uma solução 
+  analítica com aplicação de fórmulas matemáticas explícitas nos dados, 
+  de modo que é preciso usar outra forma de calcular as respostas 
+  às necessidades de informações; nesse ponto, falaremos dos métodos 
+  computacionais que permitirão chegar às respostas, 
+  o que será o tema da **5a _live_**
+
+---
+
+- por fim, na nossa **6a e última _live_**, retomaremos os 3 exemplos 
+  da 1a _live_ e vamos realizar a análise completa para cada um:
+  - modelar os dados a partir do contexto e necessidade de informação apresentados
+  - usar os programas R e JAGS para encontrar a resposta Bayesiana
+  - levar de volta essa resposta ao contexto original, interpretando-a
