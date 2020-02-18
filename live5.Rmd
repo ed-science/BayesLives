@@ -26,4 +26,6 @@ header-includes:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## 
+## **PRÉ-ROTEIRIZAÇÃO** $\longrightarrow$ **retirar depois**
+
+ 
