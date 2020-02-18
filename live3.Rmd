@@ -1,0 +1,16 @@
+---
+title: "Série _Introdução às Bases da Estatística Bayesiana_"
+subtitle: |
+    _Live_ 3/6: 
+      Probabilidade Condidional e Teorema de Bayes -- 
+        As pedras angulares da Estatística Bayesiana
+author: "Prof. Dr. Marcelo Ventura Freire (EACH/USP)"
+date: "13/04/2020"
+output: beamer_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## 

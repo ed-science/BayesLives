@@ -1,0 +1,18 @@
+---
+title: "Série _Introdução às Bases da Estatística Bayesiana_"
+subtitle: |
+    _Live_ 2/6: 
+      Probabilidade como Caracterização Quantitativa 
+        de Escolha Racional de Crença
+author: "Prof. Dr. Marcelo Ventura Freire (EACH/USP)"
+date: "30/03/2020"
+output: beamer_presentation
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## 
