@@ -1,6 +1,7 @@
 # BayesLives
 Slides para a série _Introdução às Bases da Estatística Bayesiana_ de 6 _lives_ 
-a serem veiculadas no canal de YouTube _EstaTiDados_ de Thiago Marques (https://www.youtube.com/channel/UC4jROkPjTvnXRkuo2GAwKXw/) 
+a serem veiculadas no canal de YouTube _EstaTiDados_ de Thiago Marques
+(https://www.youtube.com/channel/UC4jROkPjTvnXRkuo2GAwKXw/) 
 originalmente planejadas para os dias 
 16/03/2020, 30/03/2020, 13/04/2020, 27/04/2020, 11/05/2020 e 25/05/2020.
 
