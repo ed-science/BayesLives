@@ -27,4 +27,20 @@ header-includes:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## 
+## **PRÉ-ROTEIRIZAÇÃO** $\longrightarrow$ **retirar depois**
+
+  - conceitos referentes a probabilidades de eventos
+    - probabilidade a prori
+    - probabilidade conjunta
+    - probabilidade condicional (ou verossimilhança)
+    - probabilidade marginal
+    - probabilidade a posteriori
+    - independência entre eventos
+  - Teoremas
+    - da Probabilidade Total
+      - formulação para
+    - de Bayes
+      - levando uma probabilidade a priori, um conjunto de verossimilhanças e dados a uma probabilidade a posteriori
+      - 
+  - não é a probabilidade quem muda: é você que passa a olhar para outra probabilidade
+
