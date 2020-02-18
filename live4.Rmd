@@ -27,4 +27,26 @@ header-includes:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## 
+## **PRÉ-ROTEIRIZAÇÃO** $\longrightarrow$ **retirar depois**
+
+  - alguns problemas de Inferência
+    - estimação pontual e intervalar
+      - 
+    - teste de hipóteses
+      - 
+    - predição e previsão
+      - 
+  - os problemas de Inferência Bayesiana podem ser caracterizados como problemas de decisão com as probabilidades a posteriori
+    - Teoria de Decisão
+      -
+    - caracterização dos problemas Inferência como problemas de decisão
+      - estimação pontual
+        -
+      - estimação intervalar
+        -
+      - teste de hipóteses
+        -
+      - predição 
+        -
+      - previsão
+        -
