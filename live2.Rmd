@@ -6,7 +6,21 @@ subtitle: |
         de Escolha Racional de Crença
 author: "Prof. Dr. Marcelo Ventura Freire (EACH/USP)"
 date: "30/03/2020"
-output: beamer_presentation
+output: 
+  beamer_presentation:
+      # keep_tex: yes
+      keep_tex: no
+header-includes:
+  - \usepackage{enumitem}
+  - \usepackage{tikzsymbols}
+  - \setlistdepth{20}
+  - \renewlist{itemize}{itemize}{20}
+  - \renewlist{enumerate}{enumerate}{20}
+  - \setlist[itemize]{label=$\cdot$}
+  - \setlist[itemize,1]{label=*}
+  - \setlist[itemize,2]{label=\textbullet}
+  - \setlist[itemize,3]{label=--}
+  - \setlist[itemize,4]{label=$\cdot$}
 ---
 
 
