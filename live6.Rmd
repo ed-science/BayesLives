@@ -26,4 +26,19 @@ header-includes:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## 
+## **PRÉ-ROTEIRIZAÇÃO** $\longrightarrow$ **retirar depois**
+
+- Exemplo 1
+  - modelar os dados a partir do contexto e necessidade de informação apresentados
+  - usar os programas R e JAGS para encontrar a resposta Bayesiana
+  - levar de volta essa resposta ao contexto original, interpretando-a
+- Exemplo 2
+  - modelar os dados a partir do contexto e necessidade de informação apresentados
+  - usar os programas R e JAGS para encontrar a resposta Bayesiana
+  - levar de volta essa resposta ao contexto original, interpretando-a
+- Exemplo 3
+  - modelar os dados a partir do contexto e necessidade de informação apresentados
+  - usar os programas R e JAGS para encontrar a resposta Bayesiana
+  - levar de volta essa resposta ao contexto original, interpretando-a
+
+
