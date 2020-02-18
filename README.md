@@ -12,14 +12,12 @@ Isso fica para a próxima série. 😉
 
 Programação: 
 
-- Live 1 (16/03/2020): Parte 1/6: Apresentando a Estatística Bayesiana
-- Live 2 (30/03/2020): Parte 2/6: Probabilidade como Caracterização Quantitativa 
+- Live 1/6 (16/03/2020): Apresentando a Estatística Bayesiana
+- Live 2/6 (30/03/2020): Probabilidade como Caracterização Quantitativa 
     de Escolha Racional de Crença
-- Live 3 (13/04/2020): Parte 3/6: Probabilidade Condidional e Teorema de Bayes -- 
+- Live 3/6 (13/04/2020): Probabilidade Condidional e Teorema de Bayes -- 
     As pedras angulares da Estatística Bayesiana
-- Live 4 (27/04/2020): Parte 4/6: Generalização dos Dados para a População -- 
+- Live 4/6 (27/04/2020): Generalização dos Dados para a População -- 
     A Inferência Bayesiana
-- Live 5 (11/05/2020): Parte 5/6: Métodos Computacionais Utilizados 
-    em Inferência Bayesiana
-- Live 6 (25/05/2020): Parte 6/6: Modelagem e Análise Bayesiana do Exemplos 
-    da Primeira Live
+- Live 5/6 (11/05/2020): Métodos Computacionais Utilizados em Inferência Bayesiana
+- Live 6/6 (25/05/2020): Modelagem e Análise Bayesiana do Exemplos da Primeira Live
