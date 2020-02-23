@@ -30,10 +30,10 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Objetivos desta série de _lives_
 
-O objetivos desta série de 6 _lives_ é dar uma visão panorâmica que possa servir 
-de guia introdutória de estudo e que apresente algum grau de profundidade dos 
-fundamentos que dão base à Estatística Bayesiana, mas sem se pretender ser um
-tutorial.
+O objetivos desta série de 6 _lives_ é dar uma visão panorâmica àquilo que dá a 
+base, que dá o fundamento à Estatística Bayesiana, mas sem se pretender ser um
+tutorial de uso e nem um curso teórico, pois não disporíamos de tempo o suficiente
+para nenhum dos dois.
 
 - O tutorial fica para a próxima série. $\Winkey$
 
@@ -89,7 +89,7 @@ seguintes.
 
 
 
-## Exemplo 1:
+## Exemplo 1: nível *very easy*
 
 - contexto da situação
 - necessidade de informação
@@ -99,22 +99,56 @@ seguintes.
 
 
 
-## Exemplo 2:
-  - contexto da situação
-  - necessidade de informação
-  - dados observados
-  - método adequado para lidar com o problema
-  - conclusão obtida
+## Exemplo 2: nível *easy*
+
+- contexto da situação
+- necessidade de informação
+- dados observados
+- método adequado para lidar com o problema
+- conclusão obtida
 
 
 
-## Exemplo 3:
+## Exemplo 3: nível *moderate*
 
-  - contexto da situação
-  - necessidade de informação
-  - dados observados
-  - método adequado para lidar com o problema
-  - conclusão obtida
+- contexto da situação
+- necessidade de informação
+- dados observados
+- método adequado para lidar com o problema
+- conclusão obtida
+
+
+## Exemplo 4: nível *hard* -- nosso modelo de cognição musical
+
+- contexto da situação
+  - como lidamos com material como melodias?
+  - ***VER MAIS NO RELATÓRIO DA FAPESP***
+  - variáveis observáveis e variáveis latentes ligando as variáveis observáveis
+  - diversos domínios não observáveis diretamente (variáveis latentes):
+    - produção vocal
+    - percepção auditiva
+    - integração sensório-motora
+    - memória operacional (working memory)
+  - coleta de dados (variáveis observáveis)
+    - tanto com instrumentos já consolidados como com instrumentos desenvolvidos 
+      na pesquisa
+    - escalas ordinais, dados de contagem e medidas contínuas
+- necessidade de informação
+  - o grau de habilidade de cada respondente em cada domínio em função das suas
+    respostas no conjunto de instrumentos aplicados
+  - o grau de influência de cada domínio em cada instrumento separadamente
+  - avaliação da adequação dos instrumentos propostos
+- dados observados
+- método adequado para lidar com o problema
+  - modelo hierárquico Bayesiano com modelagens diferentes para cada instrumento 
+    em função do tipo de variáveis que observou
+  - mas com as variáveis latentes por trás da associação (correlação) entre as
+    variáveis dos diferentes instrumentos
+- conclusão obtida
+  - ***VER NO RELATÓRIO DA FAPESP***
+- este último exemplo ilustra bem o potencial de utilização dos métodos Bayesianos 
+  em contexto complicados de abordar 
+
 
 
 ## O que é Estatística Bayesiana?
@@ -122,7 +156,10 @@ seguintes.
 Respondendo de uma forma enganadoramente simples, _Estatística Bayesiana_ é uma 
 forma lógica e quantitativamente coerente de decidir em que escolher acreditar 
 ou escolher como agir em face aos dados observados
-  
+
+- Porquê "enganadoramente simples"?
+  - É o que vamos ver nos próximos 5 _slides_ e também nas próximas 5 *lives*
+
 ---
   
 - a partir de um estado inicial de baixo conhecimento a respeito do fenômeno, 
@@ -130,7 +167,7 @@ ou escolher como agir em face aos dados observados
   a crença de forma coerente em face ao que tiver sido observado
 - essa escolha racional de crença ou expectativa sobre a realidade será 
   caracterizada quantitativamente na forma de *Probabilidade*, 
-  tema da nossa **2a _live_**
+  tema da nossa **2^a^ _live_**
 
 ---
 
