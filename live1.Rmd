@@ -26,6 +26,9 @@ header-includes:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+options(omitlatexcom = T)
+library(tidyverse)
+`%!in%` <- negate(`%in%`)
 ```
 
 ## Objetivos desta série de _lives_
@@ -101,10 +104,66 @@ seguintes.
 
 ## Exemplo 2: nível *easy*
 
-- contexto da situação
-- necessidade de informação
-- dados observados
+- contexto da situação:
+  - avaliar a eficiência de 4 dietas de crescimento para criadouro de frango
+  - fonte: `help(ChickWeight)` no R
+- necessidade de informação:
+  - há diferença sistemática entre os resultados das quatro dietas?
+  - se houver, qual é a diferença de crescimento entre as dietas? 
+  - como elas são comparáveis entre sí?
+  - qual dieta é melhor? 
+  - qual crescimento podemos esperar para um frango submetido à melhor dieta?
+
+---
+
+```{r dados_exemplo_2a, include=FALSE}
+Granja <- 
+  ChickWeight %>% 
+  as.data.frame() %>% 
+  filter(Time %in% c(0, 18)) %>%
+  select(Chick, Diet, Time, weight) %>% 
+  mutate(Chick = Chick %>% as.character() %>% as_factor()) %>% 
+  pivot_wider(
+    names_from = Time, 
+    names_prefix = "Weight",
+    values_from = weight
+  ) %>% 
+  na.exclude() %>% 
+  mutate(PctGain = 100*(Weight18 - Weight0)/Weight0)
+```
+
+- Dados observados
+
+```{r dados_exemplo_2b, results='asis', echo=FALSE}
+Granja %>%
+  mutate(PctGain = PctGain %>% round(2)) %>%
+  head(30) %>% 
+  Hmisc::latex(file = "", size = "tiny", multicol = T, rowname = NULL)
+```
+
+---
+
+- Dados observados
+
+```{r dados_exemplo_2c}
+knitr::asis_output("\\footnotesize")
+Granja %>% select(-Chick) %>% str()
+Granja %>% select(-Chick) %>% summary()
+knitr::asis_output("\\normalsize")
+```
+
+---
+
 - método adequado para lidar com o problema
+  - comparação entre médias dos quatros grupos
+  - com Estatística Bayesiana, será um modelo hierárquico
+  - se você entende de Estatística Clássica, seria uma ANOVA + teste de 
+    comparação múltipla
+    - preocupação com a variância ser conhecida ou não, ser a mesma entre os 
+      grupos ou não
+    - às vezes, precisa apelar para testes assintóticos mesmo com amostras de 
+      tamanho moderado
+    - sem essas preocupações nos modelos hierárquicos
 - conclusão obtida
 
 
