@@ -1,6 +1,7 @@
 ---
-title: "Série _Introdução às Bases da Estatística Bayesiana_"
+title: "_Bayes Lives_"
 subtitle: |
+    Série de _Lives_ de _Introdução às Bases da Estatística Bayesiana_ \
     _Live_ 3/6: 
       Probabilidade Condidional e Teorema de Bayes -- 
         As pedras angulares da Estatística Bayesiana
