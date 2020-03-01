@@ -32,6 +32,10 @@ library(tidyverse)
 `%!in%` <- negate(`%in%`)
 ```
 
+## Apresentação
+
+***FAZER AQUI A APRESENTAÇÃO E DIZER QUEM SOU EU***
+
 ## Objetivos desta série de _lives_
 
 O objetivos desta série de 6 _lives_ é dar uma visão panorâmica àquilo que dá a 

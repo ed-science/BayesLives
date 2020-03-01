@@ -80,7 +80,7 @@ Doctor Strange e Tony Stark em *Avengers Infinity Wars*: \linebreak
 - Em quantos deles nós perdiamos? \linebreak
 - Em todos exceto um.
 
-Atenção: Não é essa a interpretação usada em Estatística Bayesiana
+Essa ***não é*** a interpretação usada em Estatística Bayesiana
 
 ## Interpretações epistemológicas
 
@@ -115,7 +115,7 @@ Um agente racional:
 - atualiza suas crenças em face de novas evidências através de condicionamento
   Bayesiano (veremos na próxima *live*)
 
-## Qual é a necessidade de um sistema realmente racional de crenças?
+## Qual é a necessidade de um sistema racional de crenças?
 
 Porque nós humanos somos ***sofríveis*** para avaliar incerteza/chance 
 intuitivamente.
@@ -123,7 +123,7 @@ intuitivamente.
 Não parece uma ideia ruim trabalhar com probabilidades subjetivistas já que somos 
 vítimas dos mais diversos vieses cognitivos?
 
-![Vieses Cognitivos é com a gente mesmo!](Cognbias.jpg){width=50%}
+![Vieses Cognitivos é com a gente mesmo!](Cognbias.jpg){width=40%}
 
 Felizmente, é possível sim trabalhar de forma coerente com probabilidades 
 subjetivistas.
@@ -139,12 +139,12 @@ lançamento de uma moeda, consideraremos uma aposta referente ao lançamento e t
 outras apostas não relacionadas ao resultado do lançamento.  Em todos eles, *você*
 está concorrendo a um prêmio de R\$ 1.000,00
 
-- Aposta 1: você ganha o prêmio se sair cara no lançamento daquela moeda
-- Aposta 2: você ganha se for extraída uma bola azul de uma urna tem 800 bolas 
+- Aposta 1: você ganha o prêmio se sair cara
+- Aposta 2: você ganha se for extraída uma bola azul de uma urna com 800 bolas 
   azuis e 200 bolas vermelhas
-- Aposta 3: você ganha se for extraída uma bola azul de uma urna tem 200 bolas 
+- Aposta 3: você ganha se for extraída uma bola azul de uma urna com 200 bolas 
   azuis e 800 bolas vermelhas
-- Aposta 4: você ganha se for extraída uma bola azul de uma urna tem 500 bolas 
+- Aposta 4: você ganha se for extraída uma bola azul de uma urna com 500 bolas 
   azuis e 500 bolas vermelhas
 
 ## O Princípio de Indiferença entre Apostas Equivalentes
@@ -215,7 +215,9 @@ Conceitos
   - espaço amostral $\Omega$
   - sigma-álgebra $\mathcal{F}$
   - medida de probabilidade $P$
-
+- os conceitos acima serão importantes à medida que são usados para definir os
+  conceitos que mencionarei no slide seguintes, esses que fundamentam toda a 
+  prática de Estatística Bayesiana
 
 
 ## Estrutura conceitual e elementos da formalização
