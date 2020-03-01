@@ -30,7 +30,7 @@ header-includes:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## Probabilidade e as sua correntes filosóficas de interpretações
+## Probabilidade e as sua Correntes de Interpretações
 
 - tentativas de caracterizar quantitativamente a incerteza
 - em muitas das culturas antigas, há esforços de sistematização do conceito,
@@ -45,36 +45,16 @@ knitr::opts_chunk$set(echo = FALSE)
   correntes filosóficas de interpretação
   - apenas sua interpretação ficou como tópico em aberto ao debate
 
-## Principais correntes filosóficas de interpretação de probabilidade
+## Principais Correntes Filosóficas de Interpretação
 
 Divididas em dois grupos 
 
-- interpretações epistemológicas: 
-  - probabilidades são inerentes ao conhecimento e à crença humanos enquanto 
-    processos cognitivos
 - interpretações objetivistas: 
   - probabilidades são referentes à realidade e independem de processos 
     cognitivo humanos
-
-## Interpretações epistemológicas
-
-Interpretação clássica de probabilidade
-
-- Bernoulli, Laplace e quase todos até o século 19
-- não existe aleatoriedade no universo determinístico: 
-  - não haveria nem incerteza e nem necessidade de medi-la através da 
-    probabilidade 
-    - se conseguíssemos medir tudo com precisão infinita
-
-Interpretação subjetivista de probabilidade
-
-- essa interpretação é a que fundamenta a Estatística Bayesiana
-- de Finetti, Jeffrey
-- aleatoriedade ser real ou não é irrelevante
-- probabilidade é o grau de crença mantida por um agente racional
-  - que atende ao axiomas de probabilidade (que veremos logo adiante) e 
-  - que atualiza suas crenças por condicionamento Bayesiano em face 
-    de novas evidências
+- interpretações epistemológicas: 
+  - probabilidades são inerentes ao conhecimento e à crença humanos enquanto 
+    processos cognitivos
 
 ## Interpretações objetivistas
 
@@ -88,8 +68,128 @@ Interpretação subjetivista de probabilidade
     à logica dedutiva tradicional
 - interpretação propensitivista de probabilidade
   - Popper
-  - probabilidade como propensão de um dispositivo físico produzir 
-    resultados de certos tipos
+  - probabilidade como *propensão* de um dispositivo físico produzir resultados 
+    de certos tipos, mesmo que o evento nunca venha a se repetir
+
+---
+
+![Interpretação Propensitivista de Probabilidade](14000605.jpg){width=40%}
+
+Doctor Strange e Tony Stark em *Avengers Infinity Wars*: \linebreak
+- Eu avancei no tempo e visitei 14.000.605 possíveis futuros. \linebreak
+- Em quantos deles nós perdiamos? \linebreak
+- Em todos exceto um.
+
+Atenção: Não é essa a interpretação usada em Estatística Bayesiana
+
+## Interpretações epistemológicas
+
+Interpretação clássica de probabilidade
+
+- Bernoulli, Laplace e quase todos até o século 19
+- não existe aleatoriedade no universo determinístico: 
+  - não haveria nem incerteza e nem necessidade de medi-la através da 
+    probabilidade 
+    - se conseguíssemos medir tudo com precisão infinita
+
+Interpretação subjetivista de probabilidade
+
+- essa é a interpretação que fundamenta a Estatística Bayesiana
+- de Finetti, Jeffrey
+- aleatoriedade ser real ou não é irrelevante
+- probabilidade é o *grau de crença* mantida por um *agente racional*
+
+## Interpretação subjetivista de probabilidade
+
+Como assim "probabilidade é o grau de crença mantida por um agente racional"?
+Como se comporta esse "agente racional" em relação a essa crença?
+
+Muito vago...  Vamos conceituar isso mais claramente!
+
+Um agente racional:
+
+- tem uma crença inicial a respeito da realidade que é coerente com o princípio 
+  de indiferença entre apostas equivalentes (veremos a seguir), o que equivale 
+  dizer que a crença inicial atende os axiomas de probabilidade (os quais também
+  veremos a seguir) 
+- atualiza suas crenças em face de novas evidências através de condicionamento
+  Bayesiano (veremos na próxima *live*)
+
+## Qual é a necessidade de um sistema realmente racional de crenças?
+
+Porque nós humanos somos ***sofríveis*** para avaliar incerteza/chance 
+intuitivamente.
+
+Não parece uma ideia ruim trabalhar com probabilidades subjetivistas já que somos 
+vítimas dos mais diversos vieses cognitivos?
+
+![Vieses Cognitivos é com a gente mesmo!](Cognbias.jpg){width=50%}
+
+Felizmente, é possível sim trabalhar de forma coerente com probabilidades 
+subjetivistas.
+
+## O Princípio de Indiferença entre Apostas Equivalentes
+
+O agente racional não precisa ter consciência explícita do seu grau de crença
+subjetivo inicial.  É possível *elicitar* esse grau de crença através do uso do 
+*Princípio da Indiferença entre Apostas Equivalentes*
+
+Para elicitar a probabilidade atribuída por ***você*** à chance de sair cara no 
+lançamento de uma moeda, consideraremos uma aposta referente ao lançamento e três
+outras apostas não relacionadas ao resultado do lançamento.  Em todos eles, *você*
+está concorrendo a um prêmio de R\$ 1.000,00
+
+- Aposta 1: você ganha o prêmio se sair cara no lançamento daquela moeda
+- Aposta 2: você ganha se for extraída uma bola azul de uma urna tem 800 bolas 
+  azuis e 200 bolas vermelhas
+- Aposta 3: você ganha se for extraída uma bola azul de uma urna tem 200 bolas 
+  azuis e 800 bolas vermelhas
+- Aposta 4: você ganha se for extraída uma bola azul de uma urna tem 500 bolas 
+  azuis e 500 bolas vermelhas
+
+## O Princípio de Indiferença entre Apostas Equivalentes
+
+- Se o agente racional prefere a Aposta 2 (800 azuis *vs* 200 vermelhas) à Aposta 1 
+  (cara *vs* coroa), é sinal que as apostas não são equivalentes para ele.
+- Se o agente racional prefere a Aposta 1 (cara *vs* coroa) à Aposta 3 (200 azuis 
+  *vs* 800 vermelhas), é sinal que elas não são equivalentes para ele.
+- Se tanto faz para o agente racional aceitar a Aposta 1 (cara *vs* coroa) ou a 
+  Aposta 4 (500 azuis *vs* 500 vermelhas), *i.e.*, se o agente racional é 
+  *indiferente* a elas, então:
+  - as apostas são ditas *equivalentes* 
+  - nesse caso, a razão entre o número de bolas azuis e vermelhas na Aposta 4 pode
+    ser usada como a *sua* medida de confiança em que saia cara em um lançamento
+
+## Indiferença entre Apostas Equivalentes e Coerência na Avaliação de Chance
+
+E porquê uma garante a outra?
+
+- um agente racional não concordaria voluntariamente com uma aposta que 
+  garantidamente o fará perder dinheiro; esse tipo de aposta é chamada 
+  *contrato de perda certa*
+  - para cada par de apostas não equivalentes, é possível caracterizar a pior 
+    aposta como a composição de duas apostas: uma aposta equivalente à melhor 
+    aposta e uma aposta do tipo *perda certa*
+  - no exemplo do lançamento da moeda, na comparação entre as Apostas 1 (cara 
+    *vs* coroa) e 3 (200 azuis e 800 vermelhas), a Aposta 3 (pior) pode ser 
+    obtida pela Aposta 1 e uma perda certa de ***PAREI AQUI***
+    
+    
+***PAREI AQUI***
+    
+    
+  - assim, o agente não pode aceitar a pior aposta
+- se as crenças de um agente forem abertas a contratos de perda certa, então será 
+  possível extrair todo o dinheiro desse agente, apenas aplicando iteradamente 
+  contratos desse tipo
+- assim, sistema de escolha de crenças é *coerente* se for fechado a contratos 
+  de perda certa
+
+O ponto chave entre probabilidade subjetivista e coerência é que um sistema de 
+crenças subjetivas será coerente se e somente se ele atender aos axiomas de
+Probabilidade, que veremos adiante.
+
+
 
 # Breve Introdução à Teoria da Probabilidade
 
