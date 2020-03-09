@@ -47,5 +47,6 @@ vignettes/*.pdf
 *.tex
 
 CODA*.txt
+*.bugs
 
 conjuntos de dados/
