@@ -37,7 +37,10 @@ knitr::knit_hooks$set(mysize = function(before, options, envir) {
 knitr::opts_chunk$set(mysize = TRUE, size = "\\tiny")
 options(omitlatexcom = T)
 library(tidyverse)
+library(kableExtra)
+library(rjags)
 library(runjags)
+library(R2jags)
 library(MCMCvis)
 `%!in%` <- negate(`%in%`)
 ```
@@ -184,7 +187,7 @@ Método adequado para lidar com o problema
 
 Conclusão obtida
 
-```{r tudo_aqui_1}
+```{r prepara_1}
 modelo <- 
 "# comparando as probabilidades de duas binomiais
 model{
@@ -201,6 +204,7 @@ model{
       pct.tratamento <- 100 * p.treatment
       delta.pct <- pct.tratamento - pct.controle
 }"
+write_lines(modelo, path = "modelo1.bugs")
 
 dados <- 
   dataset1 %>% 
@@ -218,19 +222,27 @@ dados <-
     )
   )
 
-inits <- 
+inits <-
   list(
     list(p.control = .3, delta.logit.p =  0),
     list(p.control = .5, delta.logit.p = -1),
     list(p.control = .7, delta.logit.p = +1)
   )
+```
 
-saida.jags <- 
-  run.jags(
-    model = modelo, 
-    data = dados, 
-    inits = inits,
-    monitor = 
+## Rodando com o JAGS através do pacote `rjags`
+
+```{r rjags_1}
+saida1.rjags <- 
+  rjags::jags.samples(
+    model = 
+      rjags::jags.model(
+        file = "modelo1.bugs", 
+        data = dados1, 
+        inits = inits, 
+        n.chains = 3,
+      ),
+    variable.names = 
       c(
         "p.control", 
         "p.treatment", 
@@ -238,14 +250,87 @@ saida.jags <-
         "delta.p",
         "pct.controle",
         "pct.tratamento",
-        "delta.pct", 
-        "dic"
+        "delta.pct"
+      ), 
+    n.iter = 5e6, 
+      
+  )
+saida1.rjags
+saida1.rjags %>% plot()
+```
+
+
+## Rodando com o JAGS através do pacote `runjags`
+
+```{r runjags_1}
+saida1.runjags <- 
+  runjags::run.jags(
+    model = modelo, 
+    data = dados, 
+    inits = inits, 
+    n.chains = 3, 
+    sample = 1e5,
+    monitor =
+      c(
+        "p.control", 
+        "p.treatment", 
+        "delta.logit.p", 
+        "delta.p",
+        "pct.controle",
+        "pct.tratamento",
+        "delta.pct"
+      ), 
+  )
+saida1.runjags
+saida1.runjags %>% plot()
+```
+
+
+## Rodando com o JAGS através do pacote `R2jags`
+
+```{r r2jags_1}
+saida1.r2jags <- 
+  R2jags::jags.parallel(
+    model.file = "modelo1.bugs", 
+    data = dados, 
+    # inits = inits,
+    parameters.to.save =  
+      c(
+        "p.control", 
+        "p.treatment", 
+        "delta.logit.p", 
+        "delta.p",
+        "pct.controle",
+        "pct.tratamento",
+        "delta.pct"
       ),
-    n.chains = 3, sample = 5e5
+    n.chains = 3, 
+    n.iter = 5e6
   )
 
-saida.jags
+saida1.r2jags
+saida1.r2jags %>% 
+  MCMCvis::MCMCplot(params = c("pct.controle", "pct.tratamento"))
+saida1.r2jags %>% 
+  MCMCvis::MCMCtrace(
+    params = c("pct.controle", "pct.tratamento"), 
+    type = "density"
+  )
+saida1.r2jags %>% 
+  MCMCvis::MCMCplot(params = c("delta.p", "delta.logit.p", "delta.pct"))
+saida1.r2jags %>% 
+  MCMCvis::MCMCtrace(
+    params = c("delta.p", "delta.logit.p", "delta.pct"), 
+    type = "density"
+  )
 ```
+
+# rodando com o rstan
+
+```{r rstan_1}
+
+```
+
 
 
 
