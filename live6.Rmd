@@ -26,7 +26,6 @@ header-includes:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
 knitr::knit_hooks$set(mysize = function(before, options, envir) {
   if (before) {
     return(options$size)
@@ -35,21 +34,157 @@ knitr::knit_hooks$set(mysize = function(before, options, envir) {
   }
 })
 knitr::opts_chunk$set(mysize = TRUE, size = "\\tiny")
+knitr::opts_chunk$set(echo = TRUE)
+# knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(lubridate)
+library(kableExtra)
+library(patchwork)
 ```
 
   ## **PRÉ-ROTEIRIZAÇÃO** $\longrightarrow$ **retirar depois**
 
-- Exemplo 1
-  - modelar os dados a partir do contexto e necessidade de informação apresentados
-  - usar os programas R e JAGS para encontrar a resposta Bayesiana
-  - levar de volta essa resposta ao contexto original, interpretando-a
-- Exemplo 2
-  - modelar os dados a partir do contexto e necessidade de informação apresentados
-  - usar os programas R e JAGS para encontrar a resposta Bayesiana
-  - levar de volta essa resposta ao contexto original, interpretando-a
-- Exemplo 3
-  - modelar os dados a partir do contexto e necessidade de informação apresentados
-  - usar os programas R e JAGS para encontrar a resposta Bayesiana
-  - levar de volta essa resposta ao contexto original, interpretando-a
+# Exemplo 1: nível *very easy*
+
+## Modelagem dos dados a partir do contexto e da necessidade de informação apresentados
+
+Dados de *Landing Page A/B Testing* disponível no Kaggle
+
+`https://www.kaggle.com/zhangluyuan/ab-testing`
+
+
+Necessidade de informação:
+
+1) Formulação 1:
+  - Mudar a *landing page* muda a probabilidade de conversão?
+  - De quanto muda essa probabilidade?
+2) Formulação 2:
+  - Mudar a *landing page* **aumenta** a probabilidade de conversão?
+  - Se sim, em quanto aumenta essa probabilidade?
+2) Formulação 3:
+  - A probabilidade de conversão pode até mudar, mas a mudança pode ser um valor
+    fonomenologicamente irrisório. Qual é o valor mais provável dessa mudança?
+    Qual faixa de valores para essa mudança é mais provável?
+
+
+
+## Reentrâncias dos dados: 
+
+```{r carrega_exemplo1, message=FALSE}
+dataset1 <- read_csv("conjuntos de dados/ab_data.csv")
+head(dataset1)
+```
+
+
+
+## Reentrâncias dos dados:
+
+Era para `group` e `landing_page` significarem a mesma coisa, mas...
+
+```{r group_landing_page}
+with(dataset1, table(group, landing_page)) %>% 
+  kable("pandoc")
+```
+
+... não significam.
+
+
+
+## Reentrâncias dos dados:
+
+Acontece que quem acessou mais de uma vez o *site* recebeu tratamento diferente de 
+quem acessou somente uma vez
+
+```{r group_landing_page_acessos}
+dataset1 %<>% group_by(user_id) %>% mutate(acessos = n()) %>% ungroup()
+dataset1 %>% filter(acessos == 1) %>% with(table(group, landing_page)) %>% kable("pandoc")
+dataset1 %>% filter(acessos > 1) %>% with(table(group, landing_page)) %>% kable("pandoc")
+```
+
+
+
+## Reentrâncias dos dados:
+
+O conjunto de dados não documentou como esse tratamento diferenciado foi feito.
+
+Assim, vamos modelar apenas quem acessou o *site* somente uma vez.
+
+```{r so_pode_haver_um}
+dataset1 %<>% 
+  filter(acessos > 1) %>% 
+  select(-acessos, -landing_page) %>% 
+  mutate(
+    hora = hour(timestamp), 
+    diasemana = wday(timestamp)
+  )
+```
+
+
+
+## Reentrâncias dos dados:
+
+```{r graficos_dataset1, include=FALSE}
+g1 <- 
+  dataset1 %>% 
+  ggplot(aes(x = timestamp)) + 
+  geom_line(aes(y = zoo::rollmean(converted, 7000, fill = "extend", align = "center"))) +
+  scale_y_continuous(name = "Proporção", limits = c(0, .3), labels = scales::percent_format()) +
+  theme(legend.position = "none")
+g2 <- 
+  dataset1 %>% group_by(group) %>% summarise(converted = mean(converted)) %>% 
+  ggplot(aes(x = group, y = converted, fill = group)) +
+  geom_bar(stat = "identity") +
+  scale_y_continuous(name = "Proporção", limits = c(0, .3), labels = scales::percent_format()) +
+  theme(legend.position = "none")
+g3 <- 
+  dataset1 %>% group_by(hora) %>% summarise(converted = mean(converted)) %>% 
+  ggplot(aes(x = hora, y = converted, fill = hora)) +
+  geom_bar(stat = "identity") +
+  scale_y_continuous(name = "Proporção", limits = c(0, .3), labels = scales::percent_format()) +
+  scale_x_continuous(breaks = 6 * (0:4)) +
+  theme(legend.position = "none")
+g4 <- 
+  dataset1 %>% group_by(diasemana) %>% summarise(converted = mean(converted)) %>% 
+  ggplot(aes(x = diasemana, y = converted, fill = diasemana)) +
+  geom_bar(stat = "identity") +
+  scale_y_continuous(name = "Proporção", limits = c(0, .3), labels = scales::percent_format()) +
+  scale_x_continuous(name = "Dia da Semana", breaks = 1:7, labels = c("D", "S", "T", "Q", "Q", "S", "S")) +
+  theme(legend.position = "none")
+g1 / (g2 + g3 + g4)
+```
+
+
+
+## usar os programas R e JAGS para encontrar a resposta Bayesiana
+
+
+
+
+
+## usar os programas R e JAGS para encontrar a resposta Bayesiana
+
+
+
+## levar de volta essa resposta ao contexto original, interpretando-a
+
+
+
+# Exemplo 2
+
+## modelar os dados a partir do contexto e necessidade de informação apresentados
+
+## usar os programas R e JAGS para encontrar a resposta Bayesiana
+
+## levar de volta essa resposta ao contexto original, interpretando-a
+
+
+
+# Exemplo 3
+
+## modelar os dados a partir do contexto e necessidade de informação apresentados
+
+## usar os programas R e JAGS para encontrar a resposta Bayesiana
+
+## levar de volta essa resposta ao contexto original, interpretando-a
 
 

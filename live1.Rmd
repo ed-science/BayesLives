@@ -110,10 +110,142 @@ seguintes.
 ## Exemplo 1: nível *very easy*
 
 - contexto da situação
+  - teste A/B referente a conversões em uma *landing page*
 - necessidade de informação
+  - mudar um aspecto específico da *landing page* modifica a chance de o botão 
+    de contratação do serviço ser clicado?
+    - se sim, qual é a direção da mudança? Aumenta ou diminui a chance?
+  - métrica de performance
+   - conversão: quantos usuários clicaram no botão de contratação do serviço
+
+## Exemplo 1: nível *very easy*
+
 - dados observados
-- método adequado para lidar com o problema
-- conclusão obtida
+  - conjunto de dados do Kaggle
+    - <https://www.kaggle.com/zhangluyuan/ab-testing>
+
+```{r exemplo1, include=FALSE}
+dataset1 <- read_csv("conjuntos de dados/ab_data.csv")
+head(dataset1)
+```
+
+
+
+## Exemplo 1: nível *very easy*
+
+- dados observados
+  - `r ncol(dataset1)` colunas e `r nrow(dataset1)` linhas
+  - colunas
+    - `r colnames(dataset1)[1]`: identificação do usuário
+    - `r colnames(dataset1)[2]`: data e hora do acesso à *landing page*
+    - `r colnames(dataset1)[3]`: grupo a que atribuído o acesso, o qual foi 
+      aleatorizado no momento do acesso à *landing page*
+      - grupo controle *vs* grupo tratamento
+    - `r colnames(dataset1)[4]`: qual página foi acessada
+      - `old_page` *vs* `new_page`
+    - `r colnames(dataset1)[5]`: conversão em venda (== clicou no botão mágico)
+      - 0 == não *vs* 1 == sim
+
+
+
+## Exemplo 1: nível *very easy*
+
+Mas cuidado: parece que `r colnames(dataset1)[3]` e `r colnames(dataset1)[4]` 
+são a mesma coisa, mas não são. Os respondentes foram separados em dois grupos
+
+```{r tab_dataset1}
+dataset1 %<>% group_by(user_id) %>% mutate(acessos = n()) %>% ungroup()
+dataset1 %>% filter(acessos == 1) %>% with(table(group, landing_page)) %>% kable("pandoc")
+dataset1 %>% filter(acessos > 1) %>% with(table(group, landing_page)) %>% kable("pandoc")
+dataset1 %<>% filter(acessos == 1) %>% select(-acessos, -landing_page)
+```
+
+
+
+## Exemplo 1: nível *very easy*
+
+Método adequado para lidar com o problema
+
+1) verificar se a probabilidade de conversão é igual nos dois grupos
+  a) se for diferente, determinar qual *landing page* tem maior probabilidade 
+    de conversão
+3) alternativamente, posso querer testar mais direcionadamente se a nova 
+  *landing page* é melhor ou não que a anterior
+  a) se sim, em quanto é maior?
+2) alternativamente, posso só querer estimar a diferença de probabilidade de 
+  conversão em função da diferença entre as versões nova e a antiga da 
+  *landing page*, sem nenhuma direção preferencial
+  a) qual é o valor mais provável dessa diferença?
+  b) qual é a faixa de valores mais provável dessa diferença?
+
+
+
+## Exemplo 1: nível *very easy*
+
+Conclusão obtida
+
+```{r tudo_aqui_1}
+modelo <- 
+"# comparando as probabilidades de duas binomiais
+model{
+  # modelo observado
+      converted.control ~ dbin(p.control, N.control)
+      converted.treatment ~ dbin(p.treatment, N.treatment)
+  # modelo latente
+      p.treatment <- ilogit(logit(p.control) + delta.logit.p)
+      p.control ~ dbeta(1, 1)
+      delta.logit.p ~ dnorm(0, 1)
+  # medidas de interesse
+      delta.p <- p.treatment - p.control
+      pct.controle <- 100 * p.control
+      pct.tratamento <- 100 * p.treatment
+      delta.pct <- pct.tratamento - pct.controle
+}"
+
+dados <- 
+  dataset1 %>% 
+  group_by(group) %>% 
+  summarise(
+    converted = sum(converted),
+    N = n()
+  ) %>% 
+  with(
+    list(
+      converted.control = converted[1],
+      N.control = N[1],
+      converted.treatment = converted[2],
+      N.treatment = N[2]
+    )
+  )
+
+inits <- 
+  list(
+    list(p.control = .3, delta.logit.p =  0),
+    list(p.control = .5, delta.logit.p = -1),
+    list(p.control = .7, delta.logit.p = +1)
+  )
+
+saida.jags <- 
+  run.jags(
+    model = modelo, 
+    data = dados, 
+    inits = inits,
+    monitor = 
+      c(
+        "p.control", 
+        "p.treatment", 
+        "delta.logit.p", 
+        "delta.p",
+        "pct.controle",
+        "pct.tratamento",
+        "delta.pct", 
+        "dic"
+      ),
+    n.chains = 3, sample = 5e5
+  )
+
+saida.jags
+```
 
 
 
