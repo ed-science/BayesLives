@@ -45,3 +45,7 @@ vignettes/*.pdf
 *.aux
 *.out
 *.tex
+
+CODA*.txt
+
+conjuntos de dados/
