@@ -28,6 +28,14 @@ header-includes:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+knitr::knit_hooks$set(mysize = function(before, options, envir) {
+  if (before) {
+    return(options$size)
+  } else {
+    return("\\normalsize")
+  }
+})
+knitr::opts_chunk$set(mysize = TRUE, size = "\\tiny")
 ```
 
 ## Probabilidade e as sua Correntes de Interpretações

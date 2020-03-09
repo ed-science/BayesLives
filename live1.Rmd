@@ -27,8 +27,18 @@ header-includes:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+knitr::knit_hooks$set(mysize = function(before, options, envir) {
+  if (before) {
+    return(options$size)
+  } else {
+    return("\\normalsize")
+  }
+})
+knitr::opts_chunk$set(mysize = TRUE, size = "\\tiny")
 options(omitlatexcom = T)
 library(tidyverse)
+library(runjags)
+library(MCMCvis)
 `%!in%` <- negate(`%in%`)
 ```
 
