@@ -121,6 +121,8 @@ seguintes.
   - métrica de performance
    - conversão: quantos usuários clicaram no botão de contratação do serviço
 
+
+
 ## Exemplo 1: nível *very easy*
 
 - dados observados
@@ -183,9 +185,9 @@ Método adequado para lidar com o problema
 
 
 
-## Exemplo 1: nível *very easy*
+# Exemplo 1: nível *very easy*
 
-Conclusão obtida
+<!-- Conclusão obtida -->
 
 ```{r prepara_1}
 modelo <- 
@@ -230,6 +232,8 @@ inits <-
   )
 ```
 
+
+
 ## Rodando com o JAGS através do pacote `rjags`
 
 ```{r rjags_1}
@@ -258,6 +262,7 @@ saida1.rjags <-
 saida1.rjags
 saida1.rjags %>% plot()
 ```
+
 
 
 ## Rodando com o JAGS através do pacote `runjags`
@@ -323,12 +328,13 @@ saida1.r2jags %>%
     params = c("delta.p", "delta.logit.p", "delta.pct"), 
     type = "density"
   )
+bayesplot::mcmc_hex(saida1.r2jags, pars = c("pct.controle", "pct.tratamento"))
 ```
 
 # rodando com o rstan
 
 ```{r rstan_1}
-
+bayesplot::mcmc_hex()
 ```
 
 
