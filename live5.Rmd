@@ -35,8 +35,224 @@ knitr::knit_hooks$set(mysize = function(before, options, envir) {
   }
 })
 knitr::opts_chunk$set(mysize = TRUE, size = "\\tiny")
+library(tidyverse)
+library(kableExtra)
+library(rjags)
+library(runjags)
+library(R2jags)
+library(MCMCvis)
+`%!in%` <- negate(`%in%`)
 ```
 
 ## **PRÉ-ROTEIRIZAÇÃO** $\longrightarrow$ **retirar depois**
 
  
+
+
+
+
+# Programas que fazem o MCMC
+
+- JAGS
+- Stan
+- Lavaan
+
+
+
+# Como fazer isso de dentro do R
+
+## Usando pacotes do R para acessar o programa `JAGS`
+
+Podemos usar o programa `JAGS` de dentro do R através de várias alternativas de
+pacotes.  
+
+## Os Dados do Exemplo 1
+
+```{r exemplo1, include=FALSE, message=FALSE}
+dataset1 <- read_csv("conjuntos de dados/ab_data.csv")
+head(dataset1)
+```
+
+```{r tab_dataset1}
+dataset1 %<>% 
+  group_by(user_id) %>% 
+  mutate(acessos = n()) %>% 
+  ungroup()
+dataset1 %>% 
+  filter(acessos == 1) %>% 
+  with(table(group, landing_page)) %>% 
+  kable("pandoc")
+dataset1 %>% 
+  filter(acessos > 1) %>% 
+  with(table(group, landing_page)) %>% 
+  kable("pandoc")
+dataset1 %<>% 
+  filter(acessos == 1) %>% 
+  select(-acessos, -landing_page)
+```
+
+```{r prepara_1}
+modelo1 <- 
+"# comparando as probabilidades de duas binomiais
+model{
+  # modelo observado
+      converted.control ~ dbin(p.control, N.control)
+      converted.treatment ~ dbin(p.treatment, N.treatment)
+  # modelo latente
+      p.treatment <- ilogit(logit(p.control) + delta.logit.p)
+      p.control ~ dbeta(1, 1)
+      delta.logit.p ~ dnorm(0, 1)
+  # medidas de interesse
+      delta.p <- p.treatment - p.control
+      pct.controle <- 100 * p.control
+      pct.tratamento <- 100 * p.treatment
+      delta.pct <- pct.tratamento - pct.controle
+}"
+write_lines(modelo1, path = "modelo1.bugs")
+
+dados1 <- 
+  dataset1 %>% 
+  group_by(group) %>% 
+  summarise(
+    converted = sum(converted),
+    N = n()
+  ) %>% 
+  with(
+    list(
+      converted.control = converted[1],
+      N.control = N[1],
+      converted.treatment = converted[2],
+      N.treatment = N[2]
+    )
+  )
+
+inits1 <-
+  list(
+    list(p.control = .3, delta.logit.p =  0),
+    list(p.control = .5, delta.logit.p = -1),
+    list(p.control = .7, delta.logit.p = +1)
+  )
+```
+
+## Rodando com o JAGS através do pacote `rjags`
+
+O objetivo do pacote `rjags` é implementar a interface com o programa `JAGS`, e 
+não implementar *todas* as etapas necessárias para uma análise completa dos dados.
+
+```{r rjags_1}
+saida1.rjags <- 
+  rjags::jags.samples(
+    model = 
+      rjags::jags.model(
+        file = "modelo1.bugs", 
+        data = dados1, 
+        inits = inits1, 
+        n.chains = 3
+      ),
+    variable.names = 
+      c(
+        "p.control", 
+        "p.treatment", 
+        "delta.logit.p", 
+        "delta.p",
+        "pct.controle",
+        "pct.tratamento",
+        "delta.pct"
+      ), 
+    n.iter = 1e6
+  )
+
+saida1.rjags
+saida1.rjags %>% summary()
+```
+
+Note que, em particular, as estatísticas descritivas dos resultados da estimação através de MCMC que o pacote `rjags` imprime são muito pouco informativas.
+
+Por esse motivo, outros pacotes foram contruídos como camadas sobrepostas ao pacote
+`rjags`, como os pacotes `runjags` ou `R2jags`
+
+
+
+## Rodando com o JAGS através do pacote `runjags`
+
+```{r runjags_1}
+runjags.options(mode.continuous = T)
+saida1.runjags <- 
+  runjags::run.jags(
+    model = modelo1, 
+    data = dados1, 
+    inits = inits1, 
+    n.chains = 3, 
+    sample = 1e5,
+    monitor =
+      c(
+        "p.control", 
+        "p.treatment", 
+        "delta.logit.p", 
+        "delta.p",
+        "pct.controle",
+        "pct.tratamento",
+        "delta.pct"
+      )
+  )
+saida1.runjags
+saida1.runjags %>% plot()
+```
+
+
+## Rodando com o JAGS através do pacote `R2jags`
+
+```{r r2jags_1}
+saida1.r2jags <- 
+  R2jags::jags.parallel(
+    model.file = "modelo1.bugs", 
+    data = dados1, 
+    # inits = inits1,
+    parameters.to.save =  
+      c(
+        "p.control", 
+        "p.treatment", 
+        "delta.logit.p", 
+        "delta.p",
+        "pct.controle",
+        "pct.tratamento",
+        "delta.pct"
+      ),
+    n.chains = 3, 
+    n.iter = 5e6
+  )
+saida1.r2jags
+saida1.r2jags %>% 
+  MCMCvis::MCMCplot(object = ., params = c("pct.controle", "pct.tratamento"))
+saida1.r2jags %>% 
+  MCMCvis::MCMCtrace(object = .,
+    params = c("pct.controle", "pct.tratamento"), 
+    type = "density", 
+    pdf = F
+  )
+saida1.r2jags %>% 
+  MCMCvis::MCMCplot(object = ., params = c("delta.p", "delta.logit.p", "delta.pct"))
+saida1.r2jags %>% 
+  MCMCvis::MCMCtrace(object = .,
+    params = c("delta.p", "delta.logit.p", "delta.pct"), 
+    type = "density", 
+    pdf = F
+  )
+# saida1.r2jags %>% 
+#   bayesplot::mcmc_hex(x = ., pars = c("pct.controle", "pct.tratamento"))
+```
+
+<!-- # rodando com o rstan -->
+
+<!-- ```{r rstan_1} -->
+
+<!-- rstan::stan() -->
+
+<!-- bayesplot::mcmc_hex() -->
+<!-- ``` -->
+
+<!-- # rodando com o lavaan -->
+
+
+
+

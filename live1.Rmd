@@ -227,7 +227,7 @@ dados1 <-
     )
   )
 
-inits <-
+inits1 <-
   list(
     list(p.control = .3, delta.logit.p =  0),
     list(p.control = .5, delta.logit.p = -1),
@@ -235,49 +235,14 @@ inits <-
   )
 ```
 
-
-
-## Rodando com o JAGS através do pacote `rjags`
-
-```{r rjags_1}
-saida1.rjags <- 
-  rjags::jags.samples(
-    model = 
-      rjags::jags.model(
-        file = "modelo1.bugs", 
-        data = dados1, 
-        inits = inits, 
-        n.chains = 3,
-      ),
-    variable.names = 
-      c(
-        "p.control", 
-        "p.treatment", 
-        "delta.logit.p", 
-        "delta.p",
-        "pct.controle",
-        "pct.tratamento",
-        "delta.pct"
-      ), 
-    n.iter = 5e6, 
-      
-  )
-saida1.rjags
-saida1.rjags %>% plot()
-```
-
-
-
-## Rodando com o JAGS através do pacote `runjags`
-
 ```{r runjags_1}
+runjags.options(mode.continuous = T)
 saida1.runjags <- 
   runjags::run.jags(
-    model = modelo, 
-    data = dados, 
-    inits = inits, 
+    model = modelo1, 
+    data = dados1, 
+    inits = inits1, 
     n.chains = 3, 
-    sample = 1e5,
     monitor =
       c(
         "p.control", 
@@ -287,63 +252,17 @@ saida1.runjags <-
         "pct.controle",
         "pct.tratamento",
         "delta.pct"
-      ), 
+      ),
+    sample = 1e5
   )
 saida1.runjags
 saida1.runjags %>% plot()
 ```
 
 
-## Rodando com o JAGS através do pacote `R2jags`
-
-```{r r2jags_1}
-saida1.r2jags <- 
-  R2jags::jags.parallel(
-    model.file = "modelo1.bugs", 
-    data = dados, 
-    # inits = inits,
-    parameters.to.save =  
-      c(
-        "p.control", 
-        "p.treatment", 
-        "delta.logit.p", 
-        "delta.p",
-        "pct.controle",
-        "pct.tratamento",
-        "delta.pct"
-      ),
-    n.chains = 3, 
-    n.iter = 5e6
-  )
-
-saida1.r2jags
-saida1.r2jags %>% 
-  MCMCvis::MCMCplot(params = c("pct.controle", "pct.tratamento"))
-saida1.r2jags %>% 
-  MCMCvis::MCMCtrace(
-    params = c("pct.controle", "pct.tratamento"), 
-    type = "density"
-  )
-saida1.r2jags %>% 
-  MCMCvis::MCMCplot(params = c("delta.p", "delta.logit.p", "delta.pct"))
-saida1.r2jags %>% 
-  MCMCvis::MCMCtrace(
-    params = c("delta.p", "delta.logit.p", "delta.pct"), 
-    type = "density"
-  )
-bayesplot::mcmc_hex(saida1.r2jags, pars = c("pct.controle", "pct.tratamento"))
-```
-
-# rodando com o rstan
-
-```{r rstan_1}
-bayesplot::mcmc_hex()
-```
 
 
-
-
-## Exemplo 2: nível *easy*
+# Exemplo 2: nível *easy*
 
 - contexto da situação:
   - avaliar a eficiência de 4 dietas de crescimento para criadouro de frango
