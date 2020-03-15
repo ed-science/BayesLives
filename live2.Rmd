@@ -102,10 +102,11 @@ Interpretação clássica de probabilidade
 
 Interpretação subjetivista de probabilidade
 
-- essa é a interpretação que fundamenta a Estatística Bayesiana
+- essa é a interpretação de probabilidade que fundamenta a Estatística Bayesiana
 - de Finetti, Jeffrey
 - aleatoriedade ser real ou não é irrelevante
 - probabilidade é o *grau de crença* mantida por um *agente racional*
+- mas quem é Bayes?!?  Veremos na próxima live
 
 ## Interpretação subjetivista de probabilidade
 
