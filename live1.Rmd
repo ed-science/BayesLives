@@ -412,9 +412,26 @@ Granja %>% select(-Chick) %>% summary()
 ## Exemplo 3: nível *moderate*
 
 - contexto da situação
+  - precificação de modelos de laptops
+  - fonte: <https://www.kaggle.com/ionaskel/laptop-prices>
 - necessidade de informação
+  - quais fatores são mais influentes na definição de preço? Não o *custo*, mas 
+    sim o *preço*
+  - é possível montar um modelo de precificação para um novo modelo de laptop em 
+    termos das características que o modelo terá? qual seria uma faixa plausível 
+    de valores para se propor?
 - dados observados
+
+```{r}
+dados3 <- 
+  readr::read_csv("conjuntos de dados/laptops.csv")
+head(dados3) %>% 
+  kable("pandoc")
+```
+
+
 - método adequado para lidar com o problema
+  - modelo de regressão: uma variável resposta contínua e várias regressoras
 - conclusão obtida
 
 
