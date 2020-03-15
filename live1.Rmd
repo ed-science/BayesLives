@@ -110,6 +110,8 @@ seguintes.
 
 
 
+# Exemplo 1: nível *very easy*
+
 ## Exemplo 1: nível *very easy*
 
 - contexto da situação
@@ -185,12 +187,12 @@ Método adequado para lidar com o problema
 
 
 
-# Exemplo 1: nível *very easy*
+## Exemplo 1: nível *very easy*
 
-<!-- Conclusão obtida -->
+O que esses dados revelam?
 
 ```{r prepara_1}
-modelo <- 
+modelo1 <- 
 "# comparando as probabilidades de duas binomiais
 model{
   # modelo observado
@@ -206,9 +208,10 @@ model{
       pct.tratamento <- 100 * p.treatment
       delta.pct <- pct.tratamento - pct.controle
 }"
-write_lines(modelo, path = "modelo1.bugs")
 
-dados <- 
+# write_lines(modelo1, path = "modelo1.bugs")
+
+dados1 <- 
   dataset1 %>% 
   group_by(group) %>% 
   summarise(
@@ -384,10 +387,10 @@ Granja %>%
 - Dados observados
 
 ```{r dados_exemplo_2c}
-knitr::asis_output("\\footnotesize")
+# knitr::asis_output("\\footnotesize")
 Granja %>% select(-Chick) %>% str()
 Granja %>% select(-Chick) %>% summary()
-knitr::asis_output("\\normalsize")
+# knitr::asis_output("\\normalsize")
 ```
 
 ---
