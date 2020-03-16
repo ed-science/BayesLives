@@ -57,6 +57,9 @@ library(runjags)
 library(R2jags)
 library(MCMCvis)
 `%!in%` <- negate(`%in%`)
+runjags.options(
+  mode.continuous = T
+)
 ```
 
 # Apresentação
@@ -80,13 +83,13 @@ library(MCMCvis)
 
 
 
-## Objetivos desta série de *lives*
+## Objetivos desta Série de *Lives*
 
 É dar uma visão panorâmica daquilo que dá a base, que dá o fundamento à 
 Estatística Bayesiana, mas sem se pretender ser um tutorial de uso e nem um 
 curso teórico, pois não disporíamos de tempo o suficiente para nenhum dos dois.
 
-- O tutorial fica para a próxima série. $\Winkey$
+- O tutorial fica para a próxima série de *lives*. $\Winkey$
 
 - O repositório deste material está em <https://github.com/zyxdef/BayesLives>
 
@@ -96,7 +99,7 @@ curso teórico, pois não disporíamos de tempo o suficiente para nenhum dos doi
 
 ## Exemplos para Todos os Gostos
 
-### Exemplos serão úteis para
+### Exemplos serão Úteis para
 
 Além de 
 
@@ -124,7 +127,7 @@ informações sobre o contexto da situação
 
 ## Exemplos para Todos os Gostos
 
-### Porquê as informações sobre o contexto da situação são necessárias?
+### Porquê as Informações sobre o Contexto são Necessárias?
 
 - toda análise é estritamente condicionada no contexto de onde seus dados vieram
 - quais conceitos e definições devem ser usados?
@@ -134,60 +137,74 @@ informações sobre o contexto da situação
 - qual é a natureza dos dados a serem trabalhados?
   - importa como, quando e em que ordem eles foram coletados?
   - se sim, quais são as respostas a essas perguntas?
-
-### Em suma
-
-Não se faz análise em um vácuo de contexto (viu, ML e IA)
+- não se faz análise em um vácuo de contexto (viu, ML e IA?)
 
 
 
-## Exemplos para Todos os Gostos
+## O que vou Apresentar em Cada Exemplo
 
-### O que vou apresentar em cada exemplo
+### Para cada Exemplo, Apresentaremos uma Situação com
 
-Para cada exemplo, teremos uma situação em que é preciso apresentar 
-
-- a necessidade de informação
+- contexto
+- necessidade de informação
 - dados observados
-- nome do método adequado para lidar com o problema
+- pelo menos um método Bayesiano que pode ser empregado no problema
 - conclusão obtida para a necessidade de informação com a aplicação 
   desse método nesses dados
 
 
 
-## Exemplos para Todos os Gostos
+## O que Posso Apresentar em Cada Exemplo
 
-### Qual é a necessidade de informação?
+### Contexto
 
-  - algum aspecto dessa situação é desconhecida
-  - quem precisa dessa informação?
-  - de qual informação essa pessoa precisa?
-  - qual o nível de detalhamento é necessário?
+- com qual(is) fenômeno(s) e seus aspectos lidaremos
+
+### Necessidade de Informação
+
+- quais aspectos não observados se deseja conhecer?
+  - parâmetros? variáveis latentes?
+- há outros aspectos (conhecidos ou desconhecidos) que não sejam de nosso
+  interesse direto, mas que interfiram em nossa capacidade de compreender os
+  aspectos de interesse?
+  - variáveis de controle/cofatores? variáveis omitidas?
+- quem precisa dessa informação?
+- de qual informação essa pessoa precisa?
+- qual o nível de detalhamento é necessário?
 
 
 
-## Exemplos para Todos os Gostos
+## O que Posso Apresentar em Cada Exemplo
 
 ### Dados Observados
 
-  - apresentados parcial ou totalmente, em forma tabular 
-  nome do método bayesiano adequado para lidar com o problema
+- apresentados parcial ou totalmente, em forma tabular 
+- discussão sobre as variáveis
+- indico a fonte dos dados, para fins de reprodutibilidade
+  
+### Como Podemos Lidar com o Problema
 
+- nome de, pelo menos, um método bayesiano compatível com o contexto, a
+  necessidade de informação e a estrutura do conjunto de dados
 
-## Exemplos para Todos os Gostos
+### Conclusão Obtida para a Necessidade de Informação com a Aplicação desse Método nesses Dados
 
-### Conclusão Obtida para a Necessidade de Informação com a Aplicação 
-  desse Método nesses Dados
-
+- análise no R da estimação via MCMC com o software JAGS
 
 
 ## Critérios para a Escolha dos Exemplos
 
-- os exemplos terão grau crescente de complexidade 
 - serão exemplos vindos de áreas distintas
+  - marketing digital
+  - controle de qualidade
+  - precificação
+  - ***AQUI***
 - os métodos cobrirão tipos diferentes de dados
   - respostas dummy, contagem e contínua
   - regressoras categóricas e quantitativas
+- os modelos terão grau crescente de complexidade 
+  - modelos *single level*
+  - modelos hierárquicos *multi-level*
 
 
 
@@ -198,7 +215,7 @@ Para cada exemplo, teremos uma situação em que é preciso apresentar
 ### Contexto da Aplicação
 
 - teste A/B referente a conversões do acesso em venda (i.e., o usuário clicar no
-  botão de venda) na *landing page* de uma empresa
+  botão de venda) na *landing page* do *site* de uma empresa
 
 ### Necessidade de Informação
 
@@ -206,7 +223,7 @@ Para cada exemplo, teremos uma situação em que é preciso apresentar
   conversão?
   - se sim, qual é a direção dessa mudança? Aumenta ou diminui a chance?
 - métrica de performance
- - conversão: quantos usuários clicaram no botão de contratação do serviço
+  - conversão: quantos usuários clicaram no botão de contratação do serviço
 
 
 
@@ -214,15 +231,19 @@ Para cada exemplo, teremos uma situação em que é preciso apresentar
 
 Conjunto de dados do Kaggle
 
-- <https://www.kaggle.com/zhangluyuan/ab-testing>
-
-```{r carrega_dataset1, echo=TRUE}
+```{r carrega_dataset1}
 if (file.exists("dataset1.Rds")) {
   dataset1 <- read_rds("dataset1.Rds")
 } else {
   dataset1 <- read_csv("conjuntos de dados/ab_data.csv")
   write_rds(dataset1, "dataset1.Rds")
 }
+```
+
+- `r ncol(dataset1)` colunas e `r nrow(dataset1)` linhas
+- <https://www.kaggle.com/zhangluyuan/ab-testing>
+
+```{r imprime_dataset1}
 head(dataset1) %>% 
   kable("pandoc")
 ```
@@ -231,22 +252,26 @@ head(dataset1) %>%
 
 ## Dados Observados
 
-### Tamanho do Conjunto de Dados
-
-- `r ncol(dataset1)` colunas e `r nrow(dataset1)` linhas
-
-### Variáveis
+### Variáveis que não Usaremos
 
 - `user_id`: identificação do usuário que acessou a *landing page*
 - `timestamp`: data e hora do acesso à *landing page*
-  - em princípio, não tem influência na conversão, mas podemos fazer uma
-    avaliação mais pedestre (sem precisar de modelagem)
+  - em princípio, não deveria ter influência na conversão, mas podemos avaliar
+    isso de forma descritiva sem precisar de modelagem ou teste
 - `group`: grupo em que o acesso foi alocado
   - aleatorizado no momento do acesso à *landing page*
-  - em princípio, é para ser a mesmo coisa que a `landing_page` a seguir, 
   - `control` *vs* `treatment`
+  - em princípio, é para ser a mesmo coisa que a `landing_page` a seguir, mas 
+    veremos que não é
+
+
+
+## Dados Observados
+
+### Variáveis: quais Usaremos
+
 - `landing_page`: qual versão da página foi acessada
-  - variável independente binária
+  - variável independente nominal
   - `old_page` *vs* `new_page`
 - `converted`: conversão em venda 
   - variável resposta binária
@@ -254,35 +279,13 @@ head(dataset1) %>%
 
 
 
-## Método adequado para lidar com o problema
-
-Eu posso formular a questão de interesse de mais de uma forma.
-
-Eu posso querer:
+## Eu Posso Querer
 
 - saber se a nova versão da *landing page* aumenta a probabilidade de conversão
   - se sim, aumenta em quanto essa probabilidade?
-
-
-
-## Método adequado para lidar com o problema
-
-Eu posso formular a questão de interesse de mais de uma forma.
-
-Eu posso querer:
-
 - saber se a probabilidade de conversão é igual nos dois grupos
   - se for diferente, qual *landing page* tem maior probabilidade de conversão?
-  - qual é a diferença entre essas probabilidades
-
-
-
-## Método adequado para lidar com o problema
-
-Eu posso formular a questão de interesse de mais de uma forma.
-
-Eu posso querer:
-
+  - qual é a diferença entre essas probabilidades?
 - só uma estimativa da diferença entre as probabilidade de conversão em função 
   da diferença entre as versões nova e a antiga da *landing page*, sem nenhuma 
   direção preferencial
@@ -292,10 +295,20 @@ Eu posso querer:
 
 
 
+## Um Método que Pode ser Empregado no Problema
+
+Para uma variável resposta binária e uma regressora nominal, poderíamos usar uma
+regressão logística, cuja parametrização pode ser escolhida em função das 
+várias formas diferentes de com que posso formular a questão de interesse.
+
+Mas, mais simples que isso, podemos comparar diretamente as probabilidades de
+conversão das duas *landing pages* ou estimar diretamente sua diferença.
+
+
+
 ## *Caveat Emptor*
 
-Mas cuidado: parece que `r colnames(dataset1)[3]` e `r colnames(dataset1)[4]` 
-são a mesma coisa, mas não são. 
+Mas cuidado: parece que `group` e `landing_page` são a mesma coisa, mas não são. 
 
 Separando os respondentes em dois grupos, veremos que...
 
@@ -320,15 +333,17 @@ dataset1 %>%
 
 
 ## *Caveat Emptor*
-#### o que farei então?
 
-Precisaríamos ter acesso ao planejamento desse experimento para termos mais informação sobre a diferença entre esses grupos e essas variáveis.
+### O que Farei Então?
 
-Como essa diferença não é documentada no conjunto de dados, então, para os fins 
-da análise deste exemplo, eliminarei os dados dos usuários que acessaram mais 
-de uma vez o site e que, por esse motivo, tiveram contato com ambas as versões 
-da *landing page*, que é um fator complicador desnecessário para este exemplo,
-que pretende ser de nível *very easy*.
+- Precisaríamos ter acesso ao planejamento desse experimento para termos mais
+  informação sobre a diferença entre esses grupos e essas variáveis.
+
+- Como essa diferença não é documentada no conjunto de dados, então, para os 
+  fins da análise deste exemplo, eliminarei os dados dos usuários que acessaram
+  mais de uma vez o site e que, por esse motivo, tiveram contato com ambas as
+  versões da *landing page*, que é um fator complicador desnecessário para este
+  exemplo, que pretende ser de nível *very easy*.
 
 ```{r elimina_acessos_duplos_dataset1}
 dataset1 %>% 
@@ -339,7 +354,7 @@ dataset1 %>%
 
 
 
-## Dados Observados
+## Dados que Serão Usados
 
 Após eliminar as observações que estavam relacionadas aos usuários com mais de 
 um acessos à *landing page*, ficamos com apenas `r nrow(dataset1)` observações 
@@ -360,16 +375,15 @@ dataset1 %>%
       list(
         big.mark = ".", 
         decimal.mark = ","
-      ),
-    col.names = c("Não", "Sim")
+      )
   )
 ```
 
 
 
-## O que esses dados revelam?
+## Modelo que Será Usado
 
-```{r roda_exemplo_1}
+```{r roda_exemplo_1, include=FALSE, cache=FALSE}
 if (file.exists("saida1_runjags.Rds")) {
   saida1_runjags <- read_rds("saida1_runjags.Rds")
 } else {
@@ -384,19 +398,15 @@ model {
   # modelo latente com uma possível parametrização
   # usando prioris vagas
       p.old_page ~ dbeta(1, 1)
-      delta.logit.p ~ dnorm(0, 1e4)
-      p.new_page <- ilogit(logit(p.old_page) + delta.logit.p)
-  # outras possíveis parametrizações de interesse
+      p.new_page ~ dbeta(1, 1)
       delta.p <- p.new_page - p.old_page
+  # outras possíveis parametrizações de interesse
       pct.old_page <- 100 * p.old_page
       pct.new_page <- 100 * p.new_page
       delta.pct <- pct.new_page - pct.old_page
+      probab.delta.p.negativo <- 100 * (pct.new_page < pct.old_page)
 }"
 
-  # write_lines(modelo1, path = "modelo1.bugs")
-  
-  runjags.options(mode.continuous = T)
-  
   saida1_runjags <- 
     runjags::run.jags(
       model = modelo1,
@@ -418,8 +428,8 @@ model {
       inits = 
         list(
           list(p.old_page = .3, delta.logit.p =  0),
-          list(p.old_page = .5, delta.logit.p = -1),
-          list(p.old_page = .7, delta.logit.p = +1)
+          list(p.old_page = .5, delta.logit.p = -100),
+          list(p.old_page = .7, delta.logit.p = +100)
         ), 
       n.chains = 3, 
       monitor =
@@ -430,14 +440,26 @@ model {
           "delta.p",
           "pct.old_page",
           "pct.new_page",
-          "delta.pct"
+          "delta.pct",
+          "probab.delta.p.negativo"
         ),
       sample = 1e5
     )
+  write_rds(saida1_runjags, "saida1_runjags.Rds")
 }
 ```
 
-```{r imprime_exemplo_1, cache=TRUE}
+```{r imprime_modelo_1}
+saida1_runjags$model
+```
+
+> "Oh, mas o que é isso, Marcelo?!? Não estou entendendo nada!!! Eu tenho medo!"
+
+Relaxa, que até a 6^a^ *live* vai fazer mais sentido
+
+## O que esses dados revelam?
+
+```{r imprime_exemplo_1}
 saida1_runjags
 ```
 
@@ -445,10 +467,47 @@ saida1_runjags
 
 ## O que esses dados revelam?
 
-```{r graficos_exemplo_1, cache=TRUE}
-saida1_runjags %>% plot()
+```{r graficos1a, fig.height=3, message=FALSE}
+saida1_runjags %>% 
+  runjags:::plot.runjags(vars = "pct.old_page", plot.type = c("density")
+                         )
+saida1_runjags %>% 
+  runjags:::plot.runjags(vars = "pct.new_page", plot.type = c("density"))
 ```
 
+
+
+## O que esses dados revelam?
+
+```{r graficos1b}
+saida1_runjags %>% plot(vars = "delta.pct")
+```
+
+
+
+## O que esses dados revelam?
+
+### Sobre `probab.delta.p.negativo` e `delta.pct`
+
+- estimamos que a probabilidade a posteriori de a nova *landing page* ter
+  conversão *menor* do que a da velha seja de 
+ `r saida1_runjags$summaries["probab.delta.p.negativo", "Mean"] %>% round(2)`% 
+- estimamos que a diferença entre as probabilidades de conversão entre as 
+  páginas nova e velha deve ser ao redor de 
+  `r saida1_runjags$summaries["delta.pct", "Mean"] %>% round(2)`%.
+  <!-- - vai depender do contexto se isso é uma diferença fenomenologicamente -->
+  <!--   significativa ou não -->
+- com 90% de probabilidade, a diferença entre as probabilidades estará no
+  intervalo [`r saida1_runjags$summaries["delta.pct", "Lower95"] %>% round(2)`%, 
+  `r saida1_runjags$summaries["delta.pct", "Upper95"] %>% round(2)`%], com 5% de
+  probabilidade abaixo e 5% acima desse intervalo.
+  
+### Sobre `pct.old_page` e `pct.new_page`
+
+- é possível estimar as probabilidades de conversão na página antiga e nova por 
+`r saida1_runjags$summaries["pct.old_page", "Mean"] %>% round(2)`% e 
+`r saida1_runjags$summaries["pct.new_page", "Mean"] %>% round(2)`%
+respectivamente.
 
 
 
@@ -458,12 +517,9 @@ saida1_runjags %>% plot()
 
 ### Contexto da Situação:
 
-  - avaliar a intensidade do processo de rompimento de fibra de lã em um tear 
-    em função do tipo da lã (2 tipos: `A` e `B`) e da tensão a que a fibra fica
-    submetida (3 níveis crescentes de tensão: `L` low, `M` medium, `H` high)
-  - as fibras de lã têm todas o mesmo comprimento e passam pelo mesmo
-    processamento no tear
-  - fonte: `help(warpbreaks)`
+  - avaliar a intensidade do processo de rompimento de fibra de lã com o mesmo 
+    comprimento em um tear em função do tipo da lã e da tensão a que a fibra 
+    fica submetida
 
 ### Necessidade de Informação:
 
@@ -471,8 +527,6 @@ saida1_runjags %>% plot()
     duas fibras?
   - é razoável esperar que, à medida que a tensão cresce, os rompimentos também
     aumentem; isso de fato ocorre?
-    - se sim, quais são os impactos no número esperado de rompimentos ao
-      passarmos de tensão `L` para tensão `M` e de tensão `M` para tensão `H`?
   - o aumento de rompimento em função do aumento de tensão ocorre da mesma forma 
     nos dois tipos de lã?
 
@@ -480,48 +534,271 @@ saida1_runjags %>% plot()
 
 ## Dados Observados
 
+- fonte: `help(warpbreaks)`
+
 ```{r dados_exemplo_2, include=FALSE}
-
 warpbreaks %>% 
+  head() %>% 
   kable("pandoc", format.args = list())
-
-```
-
-```{r dados_exemplo_2b, results='asis', echo=FALSE}
-Granja %>%
-  mutate(PctGain = PctGain %>% round(2)) %>%
-  head(30) %>% 
-  Hmisc::latex(file = "", size = "tiny", multicol = T, rowname = NULL)
 ```
 
 
 
-## Dados observados
+## Dados Observados
 
-```{r dados_exemplo_2c}
-# knitr::asis_output("\\footnotesize")
-Granja %>% select(-Chick) %>% str()
-Granja %>% select(-Chick) %>% summary()
-# knitr::asis_output("\\normalsize")
+### Variáveis
+
+- `breaks`: número de quebra nas fibras
+  - variável resposta discreta 
+    - dado de contagem
+- `wool`: tipo da fibra
+  - variável regressora nominal
+  - `À` *vs* `B`
+- `tension`: tensão a que a fibra estava submetida
+  - variável regressora ordinal
+  - `L` = *low*, `M` = *medium*, `H` = *high*
+  - se a tensão tivesse sido registrada em Pascals (Pa, unidade SI para tensão),
+    seria um modelo mais rico, com possibilidade de não linearidade no 
+    relacionamento com a variável dependente
+
+
+
+## Eu Posso Querer Saber
+
+- se há diferença de ruptura entre os dois tipos de lã
+  - se sim, qual tipo de lã tem menor ruptura?
+- se, de fato, a ruptura aumenta conforme a tensão aumenta
+  - se sim, aumenta quanto entre cada nível?
+- etc.  
+
+
+
+## Um Método que Pode ser Empregado no Problema
+
+- uma regressoras nominal e uma ordinal
+- variável resposta de contagem: modelada por uma distribuição Poisson com um
+  parâmetro $\lambda$ de intensidade em função das regressoras
+- podemos usar o modelo de regressão Poisson
+
+## Um Método que Pode ser Empregado no Problema
+
+### *Crash Course* em Regressão Poisson: 
+
+\small
+
+- o modelo de regressão Poisson consistem em 
+  - $Y_i \sim Poisson(\lambda_i)$ 
+    com $\log(\lambda_i) = \alpha + \beta_1 x_{1i} + \ldots + \beta_k x_{ki}$ 
+    ou, equivalentemente, 
+    $\lambda_i = e^{\alpha} e^{\beta_1 x_{1i}} \cdots e^{\beta_k x_{ki}}$,
+    i.e., cada termo $e^{\beta_j x_{ji}}$ é um termos multiplicativo em cima de 
+    $e^\alpha$
+  - como nossas regressoras são categóricas, elas serão codificadas como
+    variáveis *dummies*, de modo que 
+    - $x_{ji}$ será ou 0 ou 1, 
+    - $\beta_j x_{ji}$ será ou 0 ou $\beta_j$
+    - $e^{\beta_j x_{ji}}$ será ou 1 ou $e^{\beta_j}$
+    - se $\beta_j > 0$, então $e^{\beta_j} > 1$ e aumentará $e^\alpha$
+    - se $\beta_j < 0$, então $e^{\beta_j} < 1$ e diminuirá $e^\alpha$
+- com Estatística Clássica, é um modelo linear generalizado, estimado por
+  maximização de verossimilhança
+- com Estatística Bayesiana, encontramos as distribuições a posteriori dos 
+  parâmetros via MCMC
+
+\normalsize
+
+## Modelo que Será Usado
+
+```{r roda_exemplo_2, include=FALSE, cache=FALSE}
+if (file.exists("saida2_runjags.Rds")) {
+  saida2_runjags <- read_rds("saida2_runjags.Rds")
+} else {
+  modelo2 <- 
+"
+# modelo para regressão Poisson
+# parametrização: 
+#   alpha_A_L é o parâmetro de tension == L e wool == A
+#   beta_A_B é o efeito diferencial entre wool == A e wool == B
+#   gamma_L_M é o efeito diferencial de tension == L para tension == M
+#   gamma_M_H é o efeito diferencial de tension == M para tension == H
+model {
+  for (i in 1:N) {
+    # modelo observado
+    breaks[i] ~ dpois(lambda[i])
+    log(lambda[i]) <- 
+      alpha_A_L + 
+      beta_A_B * wool_B[i] +
+      gamma_L_M * tension_M[i] +
+      (gamma_L_M + gamma_M_H) * tension_H[i]
+  }
+# usando prioris vagas
+  alpha_A_L ~ dnorm(0, 1e2)
+  beta_A_B ~ dnorm(0, 1e2)
+  gamma_L_M ~ dnorm(0, 1e2)
+  gamma_M_H ~ dnorm(0, 1e2)
+# valores de interesse
+  lambda_A_L <- exp(alpha_A_L                                   )
+  lambda_A_M <- exp(alpha_A_L            + gamma_L_M            )
+  lambda_A_H <- exp(alpha_A_L            + gamma_L_M + gamma_M_H)
+  lambda_B_L <- exp(alpha_A_L + beta_A_B                        )
+  lambda_B_M <- exp(alpha_A_L + beta_A_B + gamma_L_M            )
+  lambda_B_H <- exp(alpha_A_L + beta_A_B + gamma_L_M + gamma_M_H)
+}"
+
+  saida2_runjags <- 
+    runjags::run.jags(
+      model = modelo2,
+      data = 
+        with(
+          warpbreaks,
+          list(
+            N = nrow(warpbreaks),
+            breaks = breaks,
+            wool_B = (wool == "B") %>% as.integer(),
+            tension_M = (tension == "M") %>% as.integer(),
+            tension_H = (tension == "H") %>% as.integer()
+          )
+        ),
+      inits = 
+        list(
+          list(alpha_A_L =   0, beta_A_B = +10, gamma_L_M = -10, gamma_M_H =   0),
+          list(alpha_A_L = +10, beta_A_B =   0, gamma_L_M = -10, gamma_M_H = +10),
+          list(alpha_A_L = -10, beta_A_B = -10, gamma_L_M =   0, gamma_M_H = +10)
+        ),
+      n.chains = 3, 
+      monitor =
+        c(
+          "alpha_A_L",
+          "beta_A_B",
+          "gamma_L_M",
+          "gamma_M_H",
+          "lambda_A_L",
+          "lambda_A_M",
+          "lambda_A_H",
+          "lambda_B_L",
+          "lambda_B_M",
+          "lambda_B_H"
+        ),
+      sample = 1e5
+    )
+  write_rds(saida2_runjags, "saida2_runjags.Rds")
+}
+```
+
+```{r imprime_modelo_2}
+saida2_runjags$model
 ```
 
 
 
-## método adequado para lidar com o problema
+## O que esses Dados Revelam?
 
-- comparação entre médias dos quatros grupos
-- com Estatística Bayesiana, será um modelo hierárquico
-- se você entende de Estatística Clássica, seria uma ANOVA + teste de 
-  comparação múltipla
-  - preocupação com a variância ser conhecida ou não, ser a mesma entre os 
-    grupos ou não
-  - às vezes, precisa apelar para testes assintóticos mesmo com amostras de 
-    tamanho moderado
-  - sem essas preocupações nos modelos hierárquicos
+```{r imprime_exemplo_2}
+saida2_runjags
+```
 
 
 
-## conclusão obtida
+## O que esses Dados Revelam?
+
+```{r graficos2a, fig.height=3, message=FALSE}
+saida2_runjags %>% 
+  runjags:::plot.runjags(vars = "alpha_A_L", plot.type = c("density"))
+saida2_runjags %>% 
+  runjags:::plot.runjags(vars = "lambda_A_L", plot.type = c("density"))
+```
+
+
+
+## O que esses Dados Revelam?
+
+```{r graficos2b, fig.height=3, message=FALSE}
+saida2_runjags %>% 
+  runjags:::plot.runjags(vars = "beta_A_B", plot.type = c("density"))
+saida2_runjags %>% 
+  runjags:::plot.runjags(vars = "lambda_B_L", plot.type = c("density"))
+```
+
+
+
+## O que esses Dados Revelam?
+
+```{r graficos2c, fig.height=3, message=FALSE}
+saida2_runjags %>% 
+  runjags:::plot.runjags(vars = "gamma_L_M", plot.type = c("density"))
+saida2_runjags %>% 
+  runjags:::plot.runjags(vars = "gamma_M_H", plot.type = c("density"))
+```
+
+
+
+## O que esses Dados Revelam?
+
+- sobre `alpha_A_L`
+  - tomando `wool==A` e `tension==L` como classe de referência, poderemos 
+    esperar $E(Y_{AL}) = e^{\alpha_{AL}}$, cuja média a posteriori foi
+    `r saida2_runjags$summaries["lambda_A_L", "Mean"] %>% round(2)` rompimentos
+    por fio de lã
+- sobre `beta_A_B`
+  - dá o efeito diferencial de passar de `wool == A` para `wool == B`
+  - como `beta_A_B` concentra quase toda sua probabilidade a posterior acima de
+    zero, então $E(Y_{B\cdot}) > E(Y_{A\cdot})$
+- sobre `gamma_L_M`
+  - dá o efeito diferencial de passar de `tension == L` para `tension == M`
+  - como `gamma_L_M` concentra quase toda sua probabilidade a posterior acima de
+    zero, então $E(Y_{\cdot M}) > E(Y_{\cdot L})$
+
+
+
+## O que esses Dados Revelam?
+
+- sobre `gamma_M_H`
+  - dá o efeito diferencial de passar de `tension == M` para `tension == H`
+  - surpreendentemente, ocorre um efeito protetor quando se traciona o fio de lã
+    para a tensão `H`, pois o efeito diferencial `gamma_M_H` concentra quase
+    toda a sua probabilidade a posteriori abaixo de zero, o que quer dizer que 
+    - se você tensiona mais, era para romper mais, certo? errado: os dados
+      apoiam a hipótese oposta
+  - como `gamma_M_H` concentra quase toda sua probabilidade a posterior *abaixo*
+    de zero, então $E(Y_{\cdot H})$ será *menor* que $E(Y_{\cdot M})$
+
+## Péra! *Reality Check* em 3, 2, 1
+
+Esse modelo faz sentido?  Tá batendo com os dados?
+
+### Descritivas
+
+```{r dataset2_descritivas1}
+warpbreaks %>% 
+  group_by(wool, tension) %>% 
+  summarise(breaks = mean(breaks) %>% round(2)) %>% 
+  pivot_wider(names_from = tension, values_from = breaks) %>% 
+  kable("pandoc", format.args = list(decimal.mark = ","))
+```
+
+### Ajuste do Modelo
+
+```{r dataset2_modelo1}
+saida2_runjags$summaries[5:10, "Mean"] %>% 
+  round(2) %>% 
+  matrix(nrow = 2, dimnames = list(c("A", "B"), c("L", "M", "H"))) %>% 
+  kable("pandoc", row.names = T)
+```
+
+## Péra! *Reality Check* em 3, 2, 1
+
+Nope. Algo de errado não está certo!
+
+- note que as rupturas em função da tensão têm comportamento diferentes para 
+  `wool == A` e para `wool == B` 
+- pode haver interação (sinergia ou antagonismo) entre os fatores `wool` e 
+  `tension`
+- como introduzir os termos de interação?
+- como medir a adequação do modelo sem termos de interação aos dados?
+- e a do modelo com termos de interação?
+- como medir a diferença de ajuste entre esses modelo?
+- tantas perguntas...
+- veremos um pouco disso tudo na 6^a^ *live*
 
 
 
@@ -530,15 +807,17 @@ Granja %>% select(-Chick) %>% summary()
 ## Contexto e Necessidade de Informação
 
 ### Contexto da situação
-  - precificação de modelos de laptops
-  - fonte: <https://www.kaggle.com/ionaskel/laptop-prices>
+
+- precificação de modelos de laptops
+- fonte: <https://www.kaggle.com/ionaskel/laptop-prices>
 
 ### Necessidade de Informação
-  - quais fatores são mais influentes na definição de preço? Não o *custo*, mas 
-    sim o *preço*
-  - é possível montar um modelo de precificação para um novo modelo de laptop em 
-    termos das características que o modelo terá? qual seria uma faixa plausível 
-    de valores para se propor?
+
+- quais fatores são mais influentes na definição de preço? Não o *custo*, mas 
+  sim o *preço*
+- é possível montar um modelo de precificação para um novo modelo de laptop em 
+  termos das características que o modelo terá? qual seria uma faixa plausível 
+  de valores para se propor?
 
 
 
@@ -549,31 +828,97 @@ if (file.exists("dataset3.Rds")) {
   dataset3 <- read_rds("dataset3.Rds")
 } else {
   dataset3 <- read_csv("conjuntos de dados/laptops.csv")
+  # data wrangling
+  dataset3 %>% 
+    select(-X1) %>% 
+    mutate(
+      Resolution = ScreenResolution %>% str_extract("[0-9]*x[0-9]*"),
+      width_pixels = ScreenResolution %>% str_extract("([0-9])*x"),
+      height_pixels = ScreenResolution %>% str_extract("x([0-9]*)"),
+      Touchscreen = ScreenResolution %>% str_detect(fixed("Touchscreen"))
+    ) %>% 
+    
+  # salvando
   write_rds(dataset3, "dataset3.Rds")
 }
-head(dataset3) %>% 
+dataset3 %>% 
+  head() %>% 
   kable("pandoc")
+dataset3 %>% 
+  select(-X1) %>% 
+  str()
+dataset3 %>% 
+  mutate_if(is.character, as_factor) %>% 
+  summary()
 ```
 
 
 
-## método adequado para lidar com o problema
+## Um Método que Pode ser Empregado no Problema
 
-  - em linguajar de Estatística Clássica, é um modelo de regressão linear com 
-    uma variável resposta contínua e várias regressoras
-  - em linguajar Bayesiano, é um modelo de regressão de nível único
-    (*single-level*)
-    (pois existe modelo *multi-level*, que veremos no próximo exemplo)
+- em Estatística Clássica, é um modelo de regressão linear com uma variável
+  resposta contínua e várias regressoras
+- em Estatística Bayesiano, é um modelo de regressão de nível único
+  (*single-level*), pois existe modelo *multi-level*, que veremos no próximo
+  exemplo
 
 
 
-## conclusão obtida
+## O que esses dados revelam?
+
+***AQUI:*** análise da saída 
 
 
 
 # Exemplo 4: nível maaaarromeno *hard*
 
-modelo de regressão multi-nível
+***AQUI:*** modelo de regressão multi-nível
+
+### Contexto da situação
+  - 
+  - fonte: <https://???>
+
+### Necessidade de Informação
+  - 
+  - 
+
+
+
+## Dados Observados
+
+<!-- ```{r carrega_dataset4} -->
+<!-- if (file.exists("dataset4.Rds")) { -->
+<!--   dataset4 <- read_rds("dataset4.Rds") -->
+<!-- } else { -->
+<!--   dataset4 <- read_csv("conjuntos de dados/???.csv") -->
+<!--   write_rds(dataset4, "dataset4.Rds") -->
+<!-- } -->
+<!-- head(dataset4) %>%  -->
+<!--   kable("pandoc") -->
+<!-- ``` -->
+
+
+
+## um método que pode ser empregado no problema
+
+- com Estatística Clássica, tenta-se resolver atraves de modelagem de equações estruturais (SEM)
+- com Estatística Bayesiano, é um modelo hierárquico multinível
+
+- com estatística clássica, seria uma ANOVA + teste de 
+  comparação múltipla
+  - preocupação com a variância ser conhecida ou não, ser a mesma entre os 
+    grupos ou não
+  - às vezes, precisa apelar para testes assintóticos mesmo com amostras de 
+    tamanho moderado
+  - sem essas preocupações nos modelos hierárquicos
+
+
+
+## O que esses dados revelam?
+
+***AQUI:*** análise da saída 
+
+
 
 
 
@@ -581,12 +926,12 @@ modelo de regressão multi-nível
 
 ## O que é Estatística Bayesiana?
 
-Respondendo de uma forma enganadoramente simples, _Estatística Bayesiana_ é uma 
+Respondendo de uma forma enganadoramente simples, *Estatística Bayesiana* é uma 
 forma lógica e quantitativamente coerente de decidir em que escolher acreditar 
 ou escolher como agir em face aos dados observados
 
 - Porquê "enganadoramente simples"?
-  - É o que vamos ver nos próximos 5 _slides_ e também nas próximas 5 *lives*
+  - É o que vamos ver nos próximos 5 *slides* e também nas próximas 5 *lives*
 
 
 
@@ -613,7 +958,7 @@ ou escolher como agir em face aos dados observados
     - posterior à coleta dos dados
     - menos vaga, mais concentrada, mais madura e menos incerta
 - esse processo de atualização da crença em função dos dados observados será
-  realizado através de um mecanismo chamado _Teorema de Bayes_,
+  realizado através de um mecanismo chamado *Teorema de Bayes*,
   tema da nossa **3^a^ _live_**
 
 
@@ -623,7 +968,7 @@ ou escolher como agir em face aos dados observados
 - de posse dessa crença final, é possível começar a responder a necessidade
   de informação sobre a realidade; mas é preciso antes saber caracterizar
   quantitativamente o tipo de necessidade de informação para usar essa crença;
-  é aqui que entram a _Teoria da Decisão_ e a _Inferência Bayesiana_,
+  é aqui que entram a *Teoria da Decisão* e a *Inferência Bayesiana*,
   temas da nossa **4^a^ _live_**
 
 
@@ -642,7 +987,8 @@ ou escolher como agir em face aos dados observados
 ## As Próximas *Lives*
 
 - por fim, na nossa **6^a^ e última _live_**, retomaremos os 3 exemplos 
-  desta 1^a^ _live_ e vamos realizar a análise completa para cada um:
-  - modelar os dados a partir do contexto e necessidade de informação apresentados
+  desta 1^a^ *live* e vamos realizar a análise completa para cada um:
+  - modelar os dados a partir do contexto e necessidade de informação
+    apresentados
   - usar os programas R e JAGS para encontrar a resposta Bayesiana
   - levar de volta essa resposta ao contexto original, interpretando-a
