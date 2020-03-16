@@ -4,7 +4,7 @@ subtitle: |
     Série de *Lives* de Introdução às Bases da Estatística Bayesiana \
     *Live* 1/6: 
       Apresentando a Estatística Bayesiana
-author: "Marcelo Ventura Freire"
+author: "Marcelo Ventura"
 date: "16/03/2020"
 output: 
   beamer_presentation:
@@ -95,7 +95,7 @@ curso teórico, pois não disporíamos de tempo o suficiente para nenhum dos doi
 
 
 
-# Exemplos Guias desta Série de *Lives*
+# Exemplos Guias
 
 ## Exemplos para Todos os Gostos
 
@@ -212,7 +212,7 @@ informações sobre o contexto da situação
 
 ## Contexto e Necessidade de Informação
 
-### Contexto da Aplicação
+### Contexto
 
 - teste A/B referente a conversões do acesso em venda (i.e., o usuário clicar no
   botão de venda) na *landing page* do *site* de uma empresa
@@ -381,7 +381,18 @@ dataset1 %>%
 
 
 
-## Modelo que Será Usado
+<!-- ## Antes de ter Acesso aos Dados, o que Posso Pensar das Probabilidades de Conversão das duas versões de *Landing Page*? -->
+
+<!-- ```{r modelo1_prioris} -->
+<!-- ggplot(aes(x = 0:1)) + -->
+<!--   geom_hline(yintercept = 1) -->
+
+<!-- ``` -->
+
+
+
+
+## O que esses dados revelam?
 
 ```{r roda_exemplo_1, include=FALSE, cache=FALSE}
 if (file.exists("saida1_runjags.Rds")) {
@@ -449,15 +460,14 @@ model {
 }
 ```
 
-```{r imprime_modelo_1}
-saida1_runjags$model
-```
+<!-- ```{r imprime_modelo_1} -->
+<!-- saida1_runjags$model -->
+<!-- ``` -->
 
-> "Oh, mas o que é isso, Marcelo?!? Não estou entendendo nada!!! Eu tenho medo!"
+<!-- > "Oh, mas o que é isso, Marcelo?!? Não estou entendendo nada!!! Eu tenho medo!" -->
 
-Relaxa, que até a 6^a^ *live* vai fazer mais sentido
+<!-- Relaxa, que até a 6^a^ *live* vai fazer mais sentido -->
 
-## O que esses dados revelam?
 
 ```{r imprime_exemplo_1}
 saida1_runjags
@@ -515,13 +525,13 @@ respectivamente.
 
 ## Contexto e Necessidade de Informação
 
-### Contexto da Situação:
+### Contexto
 
   - avaliar a intensidade do processo de rompimento de fibra de lã com o mesmo 
     comprimento em um tear em função do tipo da lã e da tensão a que a fibra 
     fica submetida
 
-### Necessidade de Informação:
+### Necessidade de Informação
 
   - há diferença sistemática no número de ocorrências de rompimento entre as 
     duas fibras?
@@ -609,6 +619,16 @@ warpbreaks %>%
 
 ## Modelo que Será Usado
 
+```{r}
+MCMCpack::MCMCpoisson(breaks ~ wool + tension, warpbreaks) %>% 
+  summary()
+MCMCpack::MCMCpoisson(breaks ~ wool * tension, warpbreaks) %>% 
+  summary()
+```
+
+
+## O que esses Dados Revelam?
+
 ```{r roda_exemplo_2, include=FALSE, cache=FALSE}
 if (file.exists("saida2_runjags.Rds")) {
   saida2_runjags <- read_rds("saida2_runjags.Rds")
@@ -679,19 +699,18 @@ model {
           "lambda_B_M",
           "lambda_B_H"
         ),
-      sample = 1e5
+      sample = 1e5, 
+      modules = "glm on"
     )
   write_rds(saida2_runjags, "saida2_runjags.Rds")
 }
 ```
 
-```{r imprime_modelo_2}
-saida2_runjags$model
-```
+<!-- ```{r imprime_modelo_2} -->
+<!-- saida2_runjags$model -->
+<!-- ``` -->
 
 
-
-## O que esses Dados Revelam?
 
 ```{r imprime_exemplo_2}
 saida2_runjags
@@ -703,9 +722,9 @@ saida2_runjags
 
 ```{r graficos2a, fig.height=3, message=FALSE}
 saida2_runjags %>% 
-  runjags:::plot.runjags(vars = "alpha_A_L", plot.type = c("density"))
+  plot(vars = "alpha_A_L", plot.type = c("density"))
 saida2_runjags %>% 
-  runjags:::plot.runjags(vars = "lambda_A_L", plot.type = c("density"))
+  plot(vars = "lambda_A_L", plot.type = c("density"))
 ```
 
 
@@ -714,9 +733,9 @@ saida2_runjags %>%
 
 ```{r graficos2b, fig.height=3, message=FALSE}
 saida2_runjags %>% 
-  runjags:::plot.runjags(vars = "beta_A_B", plot.type = c("density"))
+  plot(vars = "beta_A_B", plot.type = c("density"))
 saida2_runjags %>% 
-  runjags:::plot.runjags(vars = "lambda_B_L", plot.type = c("density"))
+  plot(vars = "lambda_B_L", plot.type = c("density"))
 ```
 
 
@@ -729,6 +748,24 @@ saida2_runjags %>%
 saida2_runjags %>% 
   runjags:::plot.runjags(vars = "gamma_M_H", plot.type = c("density"))
 ```
+
+## Rodando com outro pacote, obteríamos
+
+```{r saida2_MCMCpack}
+if (file.exists("saida2_MCMCpack.Rds")) {
+  saida2_MCMCpack <- read_rds("saida2_MCMCpack.Rds")
+} else {
+  saida2_MCMCpack <- 
+    MCMCpack::MCMCpoisson(
+      breaks ~ wool + tension, 
+      data = warpbreaks, 
+      mcmc = 1e5
+    )
+  write_rds(saida2_MCMCpack, "saida2_MCMCpack.Rds")
+}
+saida2_MCMCpack %>% summary()
+```
+
 
 
 
@@ -806,15 +843,16 @@ Nope. Algo de errado não está certo!
 
 ## Contexto e Necessidade de Informação
 
-### Contexto da situação
+### Contexto
 
 - precificação de modelos de laptops
 - fonte: <https://www.kaggle.com/ionaskel/laptop-prices>
 
 ### Necessidade de Informação
 
-- quais fatores são mais influentes na definição de preço? Não o *custo*, mas 
-  sim o *preço*
+- quais fatores são mais influentes na definição de preço? 
+  - Não o *custo* de fabricação, mas sim o *preço* que os consumidores estão
+    dispostos a pagar
 - é possível montar um modelo de precificação para um novo modelo de laptop em 
   termos das características que o modelo terá? qual seria uma faixa plausível 
   de valores para se propor?
@@ -823,35 +861,136 @@ Nope. Algo de errado não está certo!
 
 ## Dados Observados
 
-```{r carrega_dataset3}
+```{r carrega_dataset3, cache=FALSE, include=FALSE, message=FALSE, warning=FALSE}
 if (file.exists("dataset3.Rds")) {
   dataset3 <- read_rds("dataset3.Rds")
 } else {
   dataset3 <- read_csv("conjuntos de dados/laptops.csv")
-  # data wrangling
   dataset3 %>% 
-    select(-X1) %>% 
     mutate(
       Resolution = ScreenResolution %>% str_extract("[0-9]*x[0-9]*"),
-      width_pixels = ScreenResolution %>% str_extract("([0-9])*x"),
-      height_pixels = ScreenResolution %>% str_extract("x([0-9]*)"),
-      Touchscreen = ScreenResolution %>% str_detect(fixed("Touchscreen"))
+      Width_pixels = 
+        Resolution %>% 
+        str_extract("^[0-9]*") %>% 
+        as.numeric(),
+      Height_pixels = 
+        Resolution %>%
+        str_extract("[0-9]*$") %>% 
+        as.numeric(),
+      PPI = sqrt(Width_pixels^2 + Height_pixels^2)/Inches,
+      Touchscreen = 
+        ScreenResolution %>% 
+        str_detect(fixed("Touchscreen")),
+      FreqCPU = 
+        Cpu %>% 
+        str_extract(" [0-9]*\\.?[0-9]*GHz") %>% 
+        str_replace(fixed("GHz"), "") %>% 
+        str_squish() %>% 
+        as.numeric(),
+      FreqCPUUnit = 
+        Cpu %>% 
+        str_extract("[GM]Hz$"),
+      CPUMaker = 
+        Cpu %>% 
+        str_extract("^[^ ]*"),
+      GPUMaker = 
+        Gpu %>% 
+        str_extract("^[^ ]*"),
+      WeightUnit = 
+        Weight %>% 
+        str_extract("[A-Za-z]*$"),
+      WeightValue = 
+        Weight %>% 
+        str_extract("^[0-9.]*"),
+      RamValue = 
+        Ram %>% 
+        str_extract("[0-9]*") %>% 
+        as.numeric(),
+      HDD = 
+        Memory %>% 
+        str_extract("[0-9]*[TG]B HDD"),
+      HDDUnit = 
+        HDD %>% 
+        str_extract("[TG]B"),
+      HDDValue = 
+        HDD %>% 
+        str_extract("[0-9]*") %>% 
+        as.numeric() * 
+        if_else(HDDUnit == "TB", 1000, 1),
+      SSD = 
+        Memory %>% 
+        str_extract("[0-9]*[TG]B SSD"),
+      SSDUnit = 
+        SSD %>% 
+        str_extract("[TG]B"),
+      SSDValue = 
+        SSD %>% 
+        str_extract("[0-9]*") %>%
+        as.numeric() *
+        if_else(SSDUnit == "TB", 1000, 1),
+      Flash =
+        Memory %>% 
+        str_extract("[0-9]*[TG]B Flash Storage"),
+      FlashUnit = 
+        Flash %>% 
+        str_extract("[TG]B"),
+      FlashValue = 
+        Flash %>% 
+        str_extract("[0-9]*") %>%
+        as.numeric() *
+        if_else(FlashUnit == "TB", 1000, 1)
+     ) %>% 
+    select(
+      -X1,
+      -Product,
+      -ScreenResolution,
+      -Cpu,
+      -Ram,
+      -Memory,
+      -Gpu,
+      -Weight,
+      -WeightUnit,
+      -Resolution,
+      -Width_pixels,
+      -Height_pixels,
+      -FreqCPUUnit,
+      -HDD,
+      -HDDUnit,
+      -SSD,
+      -SSDUnit,
+      -Flash,
+      -FlashUnit
+    ) %>%
+    rename(
+      Ram = RamValue,
+      Weight = WeightValue,
+      HDD = HDDValue,
+      SSD = SSDValue,
+      Flash = FlashValue
+    ) %>%
+    filter(CPUMaker != "Samsung" & GPUMaker != "ARM") %>% 
+    mutate(
+      HDD = replace_na(HDD, 0),
+      SSD = replace_na(SSD, 0),
+      Flash = replace_na(Flash, 0)
     ) %>% 
-    
-  # salvando
+    mutate_if(is.character, as_factor) ->
+    dataset3
   write_rds(dataset3, "dataset3.Rds")
 }
-dataset3 %>% 
-  head() %>% 
-  kable("pandoc")
-dataset3 %>% 
-  select(-X1) %>% 
-  str()
-dataset3 %>% 
-  mutate_if(is.character, as_factor) %>% 
-  summary()
 ```
 
+<!-- ```{r dataset3_imprime} -->
+<!-- dataset3 %>%  -->
+<!--   head() %>%  -->
+<!--   kable("pandoc") -->
+<!-- ``` -->
+
+```{r dataset3_summary, warning=FALSE}
+dataset3 %>% 
+  summary()
+# map(dataset3, table)
+```
 
 
 ## Um Método que Pode ser Empregado no Problema
@@ -862,6 +1001,34 @@ dataset3 %>%
   (*single-level*), pois existe modelo *multi-level*, que veremos no próximo
   exemplo
 
+```{r ajusta3}
+if (file.exists("saida3_MCMCregr.Rds")) {
+  saida3_MCMCregr <- read_rds("saida3_MCMCregr.Rds")
+} else {
+  # saida3_MCMCregr <- 
+  #   MCMCpack::MCMCregress(
+  #     Price_euros ~ 
+  #       Company +
+  #       TypeName +
+  #       Inches +
+  #       OpSys + 
+  #       PPI + 
+  #       Touchscreen + 
+  #       FreqCPU + 
+  #       CPUMaker + 
+  #       GPUMaker + 
+  #       Weight + 
+  #       Ram + 
+  #       HDD + 
+  #       SSD + 
+  #       Flash, 
+  #     dataset3, 
+  #     mcmc = 1e5 
+  #   )
+  # write_rds(saida3_MCMCregr, "saida3_MCMCregr.Rds")
+}
+```
+
 
 
 ## O que esses dados revelam?
@@ -870,22 +1037,15 @@ dataset3 %>%
 
 
 
-# Exemplo 4: nível maaaarromeno *hard*
-
-***AQUI:*** modelo de regressão multi-nível
-
-### Contexto da situação
-  - 
-  - fonte: <https://???>
-
-### Necessidade de Informação
-  - 
-  - 
-
-
-
-## Dados Observados
-
+<!-- # Exemplo 4: nível maaaarromeno *hard* -->
+<!-- Seria um modelo de regressão multi-nível, mas não deu tempo -->
+<!-- ### Contexto -->
+<!--   -  -->
+<!--   - fonte: <https://???> -->
+<!-- ### Necessidade de Informação -->
+<!--   - a -->
+<!--   - a -->
+<!-- ## Dados Observados -->
 <!-- ```{r carrega_dataset4} -->
 <!-- if (file.exists("dataset4.Rds")) { -->
 <!--   dataset4 <- read_rds("dataset4.Rds") -->
@@ -893,32 +1053,21 @@ dataset3 %>%
 <!--   dataset4 <- read_csv("conjuntos de dados/???.csv") -->
 <!--   write_rds(dataset4, "dataset4.Rds") -->
 <!-- } -->
-<!-- head(dataset4) %>%  -->
+<!-- head(dataset4) %>% -->
 <!--   kable("pandoc") -->
 <!-- ``` -->
-
-
-
-## um método que pode ser empregado no problema
-
-- com Estatística Clássica, tenta-se resolver atraves de modelagem de equações estruturais (SEM)
-- com Estatística Bayesiano, é um modelo hierárquico multinível
-
-- com estatística clássica, seria uma ANOVA + teste de 
-  comparação múltipla
-  - preocupação com a variância ser conhecida ou não, ser a mesma entre os 
-    grupos ou não
-  - às vezes, precisa apelar para testes assintóticos mesmo com amostras de 
-    tamanho moderado
-  - sem essas preocupações nos modelos hierárquicos
-
-
-
-## O que esses dados revelam?
-
-***AQUI:*** análise da saída 
-
-
+<!-- ## um método que pode ser empregado no problema -->
+<!-- - com Estatística Clássica, é possível tentar usar modelagem de equações estruturais (SEM) -->
+<!-- - com Estatística Bayesiano, é possível usar um modelo hierárquico multinível -->
+<!-- - com estatística clássica, seria uma ANOVA + teste de  -->
+<!--   comparação múltipla -->
+<!--   - preocupação com a variância ser conhecida ou não, ser a mesma entre os  -->
+<!--     grupos ou não -->
+<!--   - às vezes, precisa apelar para testes assintóticos mesmo com amostras de  -->
+<!--     tamanho moderado -->
+<!--   - sem essas preocupações nos modelos hierárquicos -->
+<!-- ## O que esses dados revelam? -->
+<!-- ***AQUI:*** análise da saída  -->
 
 
 
@@ -934,6 +1083,8 @@ ou escolher como agir em face aos dados observados
   - É o que vamos ver nos próximos 5 *slides* e também nas próximas 5 *lives*
 
 
+
+# As Próximas *Lives*
 
 ## As Próximas *Lives*
 
