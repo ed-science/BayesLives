@@ -1,17 +1,20 @@
 ---
-title: "_Bayes Lives_"
+title: "*Bayes Lives*"
 subtitle: |
-    Série de _Lives_ de _Introdução às Bases da Estatística Bayesiana_ \
-    _Live_ 5/6: 
+    Série de *Lives* de Introdução às Bases da Estatística Bayesiana \
+    *Live* 5/6: 
       Métodos Computacionais Utilizados em Inferência Bayesiana
-author: |
-    Prof. Dr. Marcelo Ventura Freire (EACH/USP)
-    <https://github.com/zyxdef/BayesLives>
+author: "Marcelo Ventura Freire"
 date: "11/05/2020"
 output: 
   beamer_presentation:
-      # keep_tex: yes
-      keep_tex: no
+    # keep_tex: yes
+    toc: true
+    slide_level: 2
+    theme: Berkeley
+    colortheme: rose
+    fonttheme: structurebold
+    highlight: haddock
 header-includes:
   - \usepackage{enumitem}
   - \usepackage{tikzsymbols}
