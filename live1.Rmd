@@ -29,16 +29,27 @@ header-includes:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-knitr::knit_hooks$set(mysize = function(before, options, envir) {
-  if (before) {
-    return(options$size)
-  } else {
-    return("\\normalsize")
+options(
+  omitlatexcom = TRUE
+)
+knitr::opts_chunk$set(
+  echo = FALSE, 
+  message = FALSE, 
+  cache = TRUE
+)
+knitr::knit_hooks$set(
+  mysize = function(before, options, envir) {
+    if (before) {
+      return(options$size)
+    } else {
+      return("\\normalsize")
+    }
   }
-})
-knitr::opts_chunk$set(mysize = TRUE, size = "\\tiny")
-options(omitlatexcom = T)
+)
+knitr::opts_chunk$set(
+  mysize = TRUE, 
+  size = "\\tiny"
+)
 library(tidyverse)
 library(kableExtra)
 library(rjags)
