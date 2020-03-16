@@ -84,7 +84,7 @@ Divididas em dois grupos
 
 ---
 
-![Interpretação Propensitivista de Probabilidade](14000605.jpg){width=40%}
+![Interpretação Propensitivista de Probabilidade](imagens/14000605.jpg){width=40%}
 
 Doctor Strange e Tony Stark em *Avengers Infinity Wars*: \linebreak
 - Eu avancei no tempo e visitei 14.000.605 possíveis futuros. \linebreak
@@ -135,7 +135,7 @@ intuitivamente.
 Não parece uma ideia ruim trabalhar com probabilidades subjetivistas já que somos 
 vítimas dos mais diversos vieses cognitivos?
 
-![Vieses Cognitivos é com a gente mesmo!](Cognbias.jpg){width=40%}
+![Vieses Cognitivos é com a gente mesmo!](imagens/Cognbias.jpg){width=40%}
 
 Felizmente, é possível sim trabalhar de forma coerente com probabilidades 
 subjetivistas.
