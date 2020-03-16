@@ -59,218 +59,394 @@ library(MCMCvis)
 `%!in%` <- negate(`%in%`)
 ```
 
-## Apresentação
+# Apresentação
 
-***FAZER AQUI A APRESENTAÇÃO E DIZER QUEM SOU EU***
+## Muito prazer! Meu nome é Marcelo.
 
-## Objetivos desta série de _lives_
+### Formação
 
-O objetivos desta série de 6 _lives_ é dar uma visão panorâmica àquilo que dá a 
-base, que dá o fundamento à Estatística Bayesiana, mas sem se pretender ser um
-tutorial de uso e nem um curso teórico, pois não disporíamos de tempo o suficiente
-para nenhum dos dois.
+- Doutorado em Probabilidade e Estatística, IME/USP, 2005
+- Mestrado em Probabilidade e Estatística, IMECC/Unicamp, 2001
+- Bacharelado em Estatística, ENCE/IBGE, 1998
+- Técnico em Processamento de Dados, FB/RJ, 1992
+
+
+### Afiliações
+
+- Professor Doutor na EACH/USP
+- Admin na Comunidade *R Brasil* no Telegram
+  - <https://t.me/rbrasiloficial>
+- Conselheiro do CONRE-3/SP
+
+
+
+## Objetivos desta série de *lives*
+
+É dar uma visão panorâmica daquilo que dá a base, que dá o fundamento à 
+Estatística Bayesiana, mas sem se pretender ser um tutorial de uso e nem um 
+curso teórico, pois não disporíamos de tempo o suficiente para nenhum dos dois.
 
 - O tutorial fica para a próxima série. $\Winkey$
 
 - O repositório deste material está em <https://github.com/zyxdef/BayesLives>
 
 
-# Exemplos de aplicação
 
-## **PRÉ-ROTEIRIZAÇÃO** $\longrightarrow$ **Lembrar de tirar daqui**
+# Exemplos Guias desta Série de *Lives*
 
-Apresentação de 3 exemplos que motivarão e serão usados para ilustrar as _lives_ 
-seguintes. 
+## Exemplos para Todos os Gostos
 
-- para cada exemplo, apresentaremos uma situação em que é preciso apresentar 
-  - informação sobre o contexto da situação
-    - afinal, toda análise é estritamente condicionada no contexto de onde 
-      seus dados vieram
-    - quais conceitos e definições devem ser usados?
-    - quais pressuposições podem ser assumidas a respeito 
-      - do que observamos?
-      - do que *não* observamos?
-    - qual é a natureza dos dados a serem trabalhados?
-      - importa como, quando e em que ordem eles foram coletados?
-      - se sim, quais são as respostas a essas perguntas?
-    - em suma, não se faz análise em um vácuo de contexto (viu, ML e IA)
+### Exemplos serão úteis para
 
----
+Além de 
 
-- para cada exemplo, apresentaremos uma situação em que é preciso apresentar 
-  - qual é a necessidade de informação?
-    - algum aspecto essa situação é desconhecida
-    - quem precisa dessa informação?
-    - de qual informação essa pessoa precisa?
-    - qual o nível de detalhamento é necessário?
-  - dados observados
-    - apresentados parcial ou totalmente, em forma tabular 
-  - nome do método bayesiano adequado para lidar com o problema
-  - conclusão obtida para a necessidade de informação com a aplicação 
-    desse método nesses dados
+- audiência conseguir se conectar melhor com as preocupações de um análise de
+  dados
+- apresentar graus crescentes de complexidade de cenários de análise de dados
+- dar concretude aos conceitos mais abstratos que vou apresentar nas próximas
+  *lives*
+  
+Na última *live*
+  
+- vou retormar esses exemplos e analisar usando todos os conceitos e ferramentas
+  computacionais que vamos ter visto
 
----
 
-- idealmente, os exemplos terão grau crescente de complexidade 
-  - simprão, simples e médio ?  
-  - sem difícil; nada de modelos hierárquicos ou de BSEM
-- idealmente, serão exemplos vindos de áreas distintas
-  - ?? saúde pública
-  - ?? marketing
-  - ?? engenharia
-- idealmente, os métodos cobrirão tipos diferentes de dados
-  - respostas dummy,contagem e contínua
+
+## Exemplos para Todos os Gostos
+
+### Porquê vou Começar por Exemplos?
+
+Para cada exemplo, apresentaremos uma situação em que é preciso apresentar
+informações sobre o contexto da situação
+
+
+
+## Exemplos para Todos os Gostos
+
+### Porquê as informações sobre o contexto da situação são necessárias?
+
+- toda análise é estritamente condicionada no contexto de onde seus dados vieram
+- quais conceitos e definições devem ser usados?
+- quais pressuposições podem ser assumidas a respeito 
+  - do que observamos?
+  - do que *não* observamos?
+- qual é a natureza dos dados a serem trabalhados?
+  - importa como, quando e em que ordem eles foram coletados?
+  - se sim, quais são as respostas a essas perguntas?
+
+### Em suma
+
+Não se faz análise em um vácuo de contexto (viu, ML e IA)
+
+
+
+## Exemplos para Todos os Gostos
+
+### O que vou apresentar em cada exemplo
+
+Para cada exemplo, teremos uma situação em que é preciso apresentar 
+
+- a necessidade de informação
+- dados observados
+- nome do método adequado para lidar com o problema
+- conclusão obtida para a necessidade de informação com a aplicação 
+  desse método nesses dados
+
+
+
+## Exemplos para Todos os Gostos
+
+### Qual é a necessidade de informação?
+
+  - algum aspecto dessa situação é desconhecida
+  - quem precisa dessa informação?
+  - de qual informação essa pessoa precisa?
+  - qual o nível de detalhamento é necessário?
+
+
+
+## Exemplos para Todos os Gostos
+
+### Dados Observados
+
+  - apresentados parcial ou totalmente, em forma tabular 
+  nome do método bayesiano adequado para lidar com o problema
+
+
+## Exemplos para Todos os Gostos
+
+### Conclusão Obtida para a Necessidade de Informação com a Aplicação 
+  desse Método nesses Dados
+
+
+
+## Critérios para a Escolha dos Exemplos
+
+- os exemplos terão grau crescente de complexidade 
+- serão exemplos vindos de áreas distintas
+- os métodos cobrirão tipos diferentes de dados
+  - respostas dummy, contagem e contínua
   - regressoras categóricas e quantitativas
 
 
 
 # Exemplo 1: nível *very easy*
 
-## Exemplo 1: nível *very easy*
+## Contexto e Necessidade de Informação
 
-- contexto da situação
-  - teste A/B referente a conversões em uma *landing page*
-- necessidade de informação
-  - mudar um aspecto específico da *landing page* modifica a chance de o botão 
-    de contratação do serviço ser clicado?
-    - se sim, qual é a direção da mudança? Aumenta ou diminui a chance?
-  - métrica de performance
-   - conversão: quantos usuários clicaram no botão de contratação do serviço
+### Contexto da Aplicação
+
+- teste A/B referente a conversões do acesso em venda (i.e., o usuário clicar no
+  botão de venda) na *landing page* de uma empresa
+
+### Necessidade de Informação
+
+- mudar um aspecto específico da *landing page* modifica a sua chance de
+  conversão?
+  - se sim, qual é a direção dessa mudança? Aumenta ou diminui a chance?
+- métrica de performance
+ - conversão: quantos usuários clicaram no botão de contratação do serviço
 
 
 
-## Exemplo 1: nível *very easy*
+## Dados Observados
 
-- dados observados
-  - conjunto de dados do Kaggle
-    - <https://www.kaggle.com/zhangluyuan/ab-testing>
+Conjunto de dados do Kaggle
 
-```{r exemplo1, include=FALSE}
-dataset1 <- read_csv("conjuntos de dados/ab_data.csv")
-head(dataset1)
+- <https://www.kaggle.com/zhangluyuan/ab-testing>
+
+```{r carrega_dataset1, echo=TRUE}
+if (file.exists("dataset1.Rds")) {
+  dataset1 <- read_rds("dataset1.Rds")
+} else {
+  dataset1 <- read_csv("conjuntos de dados/ab_data.csv")
+  write_rds(dataset1, "dataset1.Rds")
+}
+head(dataset1) %>% 
+  kable("pandoc")
 ```
 
 
 
-## Exemplo 1: nível *very easy*
+## Dados Observados
 
-- dados observados
-  - `r ncol(dataset1)` colunas e `r nrow(dataset1)` linhas
-  - colunas
-    - `r colnames(dataset1)[1]`: identificação do usuário
-    - `r colnames(dataset1)[2]`: data e hora do acesso à *landing page*
-    - `r colnames(dataset1)[3]`: grupo a que atribuído o acesso, o qual foi 
-      aleatorizado no momento do acesso à *landing page*
-      - grupo controle *vs* grupo tratamento
-    - `r colnames(dataset1)[4]`: qual página foi acessada
-      - `old_page` *vs* `new_page`
-    - `r colnames(dataset1)[5]`: conversão em venda (== clicou no botão mágico)
-      - 0 == não *vs* 1 == sim
+### Tamanho do Conjunto de Dados
+
+- `r ncol(dataset1)` colunas e `r nrow(dataset1)` linhas
+
+### Variáveis
+
+- `user_id`: identificação do usuário que acessou a *landing page*
+- `timestamp`: data e hora do acesso à *landing page*
+  - em princípio, não tem influência na conversão, mas podemos fazer uma
+    avaliação mais pedestre (sem precisar de modelagem)
+- `group`: grupo em que o acesso foi alocado
+  - aleatorizado no momento do acesso à *landing page*
+  - em princípio, é para ser a mesmo coisa que a `landing_page` a seguir, 
+  - `control` *vs* `treatment`
+- `landing_page`: qual versão da página foi acessada
+  - variável independente binária
+  - `old_page` *vs* `new_page`
+- `converted`: conversão em venda 
+  - variável resposta binária
+  - 0 == não *vs* 1 == sim
 
 
 
-## Exemplo 1: nível *very easy*
+## Método adequado para lidar com o problema
+
+Eu posso formular a questão de interesse de mais de uma forma.
+
+Eu posso querer:
+
+- saber se a nova versão da *landing page* aumenta a probabilidade de conversão
+  - se sim, aumenta em quanto essa probabilidade?
+
+
+
+## Método adequado para lidar com o problema
+
+Eu posso formular a questão de interesse de mais de uma forma.
+
+Eu posso querer:
+
+- saber se a probabilidade de conversão é igual nos dois grupos
+  - se for diferente, qual *landing page* tem maior probabilidade de conversão?
+  - qual é a diferença entre essas probabilidades
+
+
+
+## Método adequado para lidar com o problema
+
+Eu posso formular a questão de interesse de mais de uma forma.
+
+Eu posso querer:
+
+- só uma estimativa da diferença entre as probabilidade de conversão em função 
+  da diferença entre as versões nova e a antiga da *landing page*, sem nenhuma 
+  direção preferencial
+  - qual é o valor mais provável dessa diferença?
+  - há mais outra forma de estimar essa diferença?
+  - qual é a faixa de valores mais provável dessa diferença?
+
+
+
+## *Caveat Emptor*
 
 Mas cuidado: parece que `r colnames(dataset1)[3]` e `r colnames(dataset1)[4]` 
-são a mesma coisa, mas não são. Os respondentes foram separados em dois grupos
+são a mesma coisa, mas não são. 
+
+Separando os respondentes em dois grupos, veremos que...
 
 ```{r tab_dataset1}
-dataset1 %<>% group_by(user_id) %>% mutate(acessos = n()) %>% ungroup()
-dataset1 %>% filter(acessos == 1) %>% with(table(group, landing_page)) %>% kable("pandoc")
-dataset1 %>% filter(acessos > 1) %>% with(table(group, landing_page)) %>% kable("pandoc")
-dataset1 %<>% filter(acessos == 1) %>% select(-acessos, -landing_page)
+dataset1 %>% 
+  group_by(user_id) %>% 
+  mutate(acessos = n()) %>% 
+  ungroup() ->
+  dataset1
+dataset1 %>% 
+  filter(acessos == 1) %>% 
+  with(table(group, landing_page)) %>% 
+  kable("pandoc")
+dataset1 %>% 
+  filter(acessos > 1) %>% 
+  with(table(group, landing_page)) %>% 
+  kable("pandoc")
+```
+
+... essas variáveis tem significados levemente diferentes nos dois grupos.
+
+
+
+## *Caveat Emptor*
+#### o que farei então?
+
+Precisaríamos ter acesso ao planejamento desse experimento para termos mais informação sobre a diferença entre esses grupos e essas variáveis.
+
+Como essa diferença não é documentada no conjunto de dados, então, para os fins 
+da análise deste exemplo, eliminarei os dados dos usuários que acessaram mais 
+de uma vez o site e que, por esse motivo, tiveram contato com ambas as versões 
+da *landing page*, que é um fator complicador desnecessário para este exemplo,
+que pretende ser de nível *very easy*.
+
+```{r elimina_acessos_duplos_dataset1}
+dataset1 %>% 
+  filter(acessos == 1) %>% 
+  select(-acessos, -group) ->
+  dataset1
 ```
 
 
 
-## Exemplo 1: nível *very easy*
+## Dados Observados
 
-Método adequado para lidar com o problema
+Após eliminar as observações que estavam relacionadas aos usuários com mais de 
+um acessos à *landing page*, ficamos com apenas `r nrow(dataset1)` observações 
+de acessos únicos e, nesse caso, também não precisamos da variável `group`, 
+ficando apenas com a regressora binária `landing_page`.
 
-1) verificar se a probabilidade de conversão é igual nos dois grupos
-  a) se for diferente, determinar qual *landing page* tem maior probabilidade 
-    de conversão
-3) alternativamente, posso querer testar mais direcionadamente se a nova 
-  *landing page* é melhor ou não que a anterior
-  a) se sim, em quanto é maior?
-2) alternativamente, posso só querer estimar a diferença de probabilidade de 
-  conversão em função da diferença entre as versões nova e a antiga da 
-  *landing page*, sem nenhuma direção preferencial
-  a) qual é o valor mais provável dessa diferença?
-  b) qual é a faixa de valores mais provável dessa diferença?
+```{r dataset1_limpo}
+dataset1 %>% 
+  with(
+    table(
+      landing_page,
+      converted
+    )
+  ) %>% 
+  kable(
+    "pandoc", 
+    format.args = 
+      list(
+        big.mark = ".", 
+        decimal.mark = ","
+      ),
+    col.names = c("Não", "Sim")
+  )
+```
 
 
 
-## Exemplo 1: nível *very easy*
+## O que esses dados revelam?
 
-O que esses dados revelam?
-
-```{r prepara_1}
-modelo1 <- 
-"# comparando as probabilidades de duas binomiais
-model{
+```{r roda_exemplo_1}
+if (file.exists("saida1_runjags.Rds")) {
+  saida1_runjags <- read_rds("saida1_runjags.Rds")
+} else {
+  modelo1 <- 
+"
+# modelo para comparação das probabilidades de duas binomiais
+# já estou escrevendo um código BUGS com mais de uma parametrização
+model {
   # modelo observado
-      converted.control ~ dbin(p.control, N.control)
-      converted.treatment ~ dbin(p.treatment, N.treatment)
-  # modelo latente
-      p.treatment <- ilogit(logit(p.control) + delta.logit.p)
-      p.control ~ dbeta(1, 1)
-      delta.logit.p ~ dnorm(0, 1)
-  # medidas de interesse
-      delta.p <- p.treatment - p.control
-      pct.controle <- 100 * p.control
-      pct.tratamento <- 100 * p.treatment
-      delta.pct <- pct.tratamento - pct.controle
+      converted.new_page ~ dbin(p.new_page, N.new_page)
+      converted.old_page ~ dbin(p.old_page, N.old_page)
+  # modelo latente com uma possível parametrização
+  # usando prioris vagas
+      p.old_page ~ dbeta(1, 1)
+      delta.logit.p ~ dnorm(0, 1e4)
+      p.new_page <- ilogit(logit(p.old_page) + delta.logit.p)
+  # outras possíveis parametrizações de interesse
+      delta.p <- p.new_page - p.old_page
+      pct.old_page <- 100 * p.old_page
+      pct.new_page <- 100 * p.new_page
+      delta.pct <- pct.new_page - pct.old_page
 }"
 
-# write_lines(modelo1, path = "modelo1.bugs")
-
-dados1 <- 
-  dataset1 %>% 
-  group_by(group) %>% 
-  summarise(
-    converted = sum(converted),
-    N = n()
-  ) %>% 
-  with(
-    list(
-      converted.control = converted[1],
-      N.control = N[1],
-      converted.treatment = converted[2],
-      N.treatment = N[2]
+  # write_lines(modelo1, path = "modelo1.bugs")
+  
+  runjags.options(mode.continuous = T)
+  
+  saida1_runjags <- 
+    runjags::run.jags(
+      model = modelo1,
+      data = 
+        dataset1 %>% 
+        group_by(landing_page) %>% 
+        summarise(
+          converted = sum(converted),
+          N = n()
+        ) %>% 
+        with(
+          list(
+            converted.new_page = converted[1],
+            N.new_page = N[1],
+            converted.old_page = converted[2],
+            N.old_page = N[2]
+          )
+        ), 
+      inits = 
+        list(
+          list(p.old_page = .3, delta.logit.p =  0),
+          list(p.old_page = .5, delta.logit.p = -1),
+          list(p.old_page = .7, delta.logit.p = +1)
+        ), 
+      n.chains = 3, 
+      monitor =
+        c(
+          "p.old_page", 
+          "p.new_page", 
+          "delta.logit.p", 
+          "delta.p",
+          "pct.old_page",
+          "pct.new_page",
+          "delta.pct"
+        ),
+      sample = 1e5
     )
-  )
-
-inits1 <-
-  list(
-    list(p.control = .3, delta.logit.p =  0),
-    list(p.control = .5, delta.logit.p = -1),
-    list(p.control = .7, delta.logit.p = +1)
-  )
+}
 ```
 
-```{r runjags_1}
-runjags.options(mode.continuous = T)
-saida1.runjags <- 
-  runjags::run.jags(
-    model = modelo1, 
-    data = dados1, 
-    inits = inits1, 
-    n.chains = 3, 
-    monitor =
-      c(
-        "p.control", 
-        "p.treatment", 
-        "delta.logit.p", 
-        "delta.p",
-        "pct.controle",
-        "pct.tratamento",
-        "delta.pct"
-      ),
-    sample = 1e5
-  )
-saida1.runjags
-saida1.runjags %>% plot()
+```{r imprime_exemplo_1, cache=TRUE}
+saida1_runjags
+```
+
+
+
+## O que esses dados revelam?
+
+```{r graficos_exemplo_1, cache=TRUE}
+saida1_runjags %>% plot()
 ```
 
 
@@ -278,35 +454,38 @@ saida1.runjags %>% plot()
 
 # Exemplo 2: nível *easy*
 
-- contexto da situação:
-  - avaliar a eficiência de 4 dietas de crescimento para criadouro de frango
-  - fonte: `help(ChickWeight)` no R
-- necessidade de informação:
-  - há diferença sistemática entre os resultados das quatro dietas?
-  - se houver, qual é a diferença de crescimento entre as dietas? 
-  - como elas são comparáveis entre sí?
-  - qual dieta é melhor? 
-  - qual crescimento podemos esperar para um frango submetido à melhor dieta?
+## Contexto e Necessidade de Informação
 
----
+### Contexto da Situação:
 
-```{r dados_exemplo_2a, include=FALSE}
-Granja <- 
-  ChickWeight %>% 
-  as.data.frame() %>% 
-  filter(Time %in% c(0, 18)) %>%
-  select(Chick, Diet, Time, weight) %>% 
-  mutate(Chick = Chick %>% as.character() %>% as_factor()) %>% 
-  pivot_wider(
-    names_from = Time, 
-    names_prefix = "Weight",
-    values_from = weight
-  ) %>% 
-  na.exclude() %>% 
-  mutate(PctGain = 100*(Weight18 - Weight0)/Weight0)
+  - avaliar a intensidade do processo de rompimento de fibra de lã em um tear 
+    em função do tipo da lã (2 tipos: `A` e `B`) e da tensão a que a fibra fica
+    submetida (3 níveis crescentes de tensão: `L` low, `M` medium, `H` high)
+  - as fibras de lã têm todas o mesmo comprimento e passam pelo mesmo
+    processamento no tear
+  - fonte: `help(warpbreaks)`
+
+### Necessidade de Informação:
+
+  - há diferença sistemática no número de ocorrências de rompimento entre as 
+    duas fibras?
+  - é razoável esperar que, à medida que a tensão cresce, os rompimentos também
+    aumentem; isso de fato ocorre?
+    - se sim, quais são os impactos no número esperado de rompimentos ao
+      passarmos de tensão `L` para tensão `M` e de tensão `M` para tensão `H`?
+  - o aumento de rompimento em função do aumento de tensão ocorre da mesma forma 
+    nos dois tipos de lã?
+
+
+
+## Dados Observados
+
+```{r dados_exemplo_2, include=FALSE}
+
+warpbreaks %>% 
+  kable("pandoc", format.args = list())
+
 ```
-
-- Dados observados
 
 ```{r dados_exemplo_2b, results='asis', echo=FALSE}
 Granja %>%
@@ -315,9 +494,9 @@ Granja %>%
   Hmisc::latex(file = "", size = "tiny", multicol = T, rowname = NULL)
 ```
 
----
 
-- Dados observados
+
+## Dados observados
 
 ```{r dados_exemplo_2c}
 # knitr::asis_output("\\footnotesize")
@@ -326,80 +505,79 @@ Granja %>% select(-Chick) %>% summary()
 # knitr::asis_output("\\normalsize")
 ```
 
----
-
-- método adequado para lidar com o problema
-  - comparação entre médias dos quatros grupos
-  - com Estatística Bayesiana, será um modelo hierárquico
-  - se você entende de Estatística Clássica, seria uma ANOVA + teste de 
-    comparação múltipla
-    - preocupação com a variância ser conhecida ou não, ser a mesma entre os 
-      grupos ou não
-    - às vezes, precisa apelar para testes assintóticos mesmo com amostras de 
-      tamanho moderado
-    - sem essas preocupações nos modelos hierárquicos
-- conclusão obtida
 
 
+## método adequado para lidar com o problema
 
-## Exemplo 3: nível *moderate*
+- comparação entre médias dos quatros grupos
+- com Estatística Bayesiana, será um modelo hierárquico
+- se você entende de Estatística Clássica, seria uma ANOVA + teste de 
+  comparação múltipla
+  - preocupação com a variância ser conhecida ou não, ser a mesma entre os 
+    grupos ou não
+  - às vezes, precisa apelar para testes assintóticos mesmo com amostras de 
+    tamanho moderado
+  - sem essas preocupações nos modelos hierárquicos
 
-- contexto da situação
+
+
+## conclusão obtida
+
+
+
+# Exemplo 3: nível *moderate*
+
+## Contexto e Necessidade de Informação
+
+### Contexto da situação
   - precificação de modelos de laptops
   - fonte: <https://www.kaggle.com/ionaskel/laptop-prices>
-- necessidade de informação
+
+### Necessidade de Informação
   - quais fatores são mais influentes na definição de preço? Não o *custo*, mas 
     sim o *preço*
   - é possível montar um modelo de precificação para um novo modelo de laptop em 
     termos das características que o modelo terá? qual seria uma faixa plausível 
     de valores para se propor?
-- dados observados
 
-```{r}
-dados3 <- 
-  readr::read_csv("conjuntos de dados/laptops.csv")
-head(dados3) %>% 
+
+
+## Dados Observados
+
+```{r carrega_dataset3}
+if (file.exists("dataset3.Rds")) {
+  dataset3 <- read_rds("dataset3.Rds")
+} else {
+  dataset3 <- read_csv("conjuntos de dados/laptops.csv")
+  write_rds(dataset3, "dataset3.Rds")
+}
+head(dataset3) %>% 
   kable("pandoc")
 ```
 
 
-- método adequado para lidar com o problema
-  - modelo de regressão: uma variável resposta contínua e várias regressoras
-- conclusão obtida
+
+## método adequado para lidar com o problema
+
+  - em linguajar de Estatística Clássica, é um modelo de regressão linear com 
+    uma variável resposta contínua e várias regressoras
+  - em linguajar Bayesiano, é um modelo de regressão de nível único
+    (*single-level*)
+    (pois existe modelo *multi-level*, que veremos no próximo exemplo)
 
 
-## Exemplo 4: nível *hard* -- nosso modelo de cognição musical
 
-- contexto da situação
-  - como lidamos com material como melodias?
-  - ***VER MAIS NO RELATÓRIO DA FAPESP***
-  - variáveis observáveis e variáveis latentes ligando as variáveis observáveis
-  - diversos domínios não observáveis diretamente (variáveis latentes):
-    - produção vocal
-    - percepção auditiva
-    - integração sensório-motora
-    - memória operacional (working memory)
-  - coleta de dados (variáveis observáveis)
-    - tanto com instrumentos já consolidados como com instrumentos desenvolvidos 
-      na pesquisa
-    - escalas ordinais, dados de contagem e medidas contínuas
-- necessidade de informação
-  - o grau de habilidade de cada respondente em cada domínio em função das suas
-    respostas no conjunto de instrumentos aplicados
-  - o grau de influência de cada domínio em cada instrumento separadamente
-  - avaliação da adequação dos instrumentos propostos
-- dados observados
-- método adequado para lidar com o problema
-  - modelo hierárquico Bayesiano com modelagens diferentes para cada instrumento 
-    em função do tipo de variáveis que observou
-  - mas com as variáveis latentes por trás da associação (correlação) entre as
-    variáveis dos diferentes instrumentos
-- conclusão obtida
-  - ***VER NO RELATÓRIO DA FAPESP***
-- este último exemplo ilustra bem o potencial de utilização dos métodos Bayesianos 
-  em contexto complicados de abordar 
+## conclusão obtida
 
 
+
+# Exemplo 4: nível maaaarromeno *hard*
+
+modelo de regressão multi-nível
+
+
+
+# O que é Estatística Bayesiana?
 
 ## O que é Estatística Bayesiana?
 
@@ -410,16 +588,22 @@ ou escolher como agir em face aos dados observados
 - Porquê "enganadoramente simples"?
   - É o que vamos ver nos próximos 5 _slides_ e também nas próximas 5 *lives*
 
----
+
+
+## As Próximas *Lives*
+
   
 - a partir de um estado inicial de baixo conhecimento a respeito do fenômeno, 
   assumir uma crença difusa a seu respeito, coletar observações e atualizar 
   a crença de forma coerente em face ao que tiver sido observado
+
 - essa escolha racional de crença ou expectativa sobre a realidade será 
   caracterizada quantitativamente na forma de *Probabilidade*, 
   tema da nossa **2^a^ _live_**
 
----
+
+
+## As Próximas *Lives*
 
 - mais detalhadamente: 
   - crença inicial (chamada *probabilidade a priori*)
@@ -431,16 +615,20 @@ ou escolher como agir em face aos dados observados
 - esse processo de atualização da crença em função dos dados observados será
   realizado através de um mecanismo chamado _Teorema de Bayes_,
   tema da nossa **3^a^ _live_**
-  
----
+
+
+
+## As Próximas *Lives*
   
 - de posse dessa crença final, é possível começar a responder a necessidade
   de informação sobre a realidade; mas é preciso antes saber caracterizar
   quantitativamente o tipo de necessidade de informação para usar essa crença;
   é aqui que entram a _Teoria da Decisão_ e a _Inferência Bayesiana_,
   temas da nossa **4^a^ _live_**
-  
----
+
+
+
+## As Próximas *Lives*
   
 - exceto em raras situações triviais, não será possível encontrar uma solução 
   analítica com aplicação de fórmulas matemáticas explícitas nos dados, 
@@ -449,7 +637,9 @@ ou escolher como agir em face aos dados observados
   computacionais que permitirão chegar às respostas, 
   o que será o tema da **5^a^ _live_**
 
----
+
+
+## As Próximas *Lives*
 
 - por fim, na nossa **6^a^ e última _live_**, retomaremos os 3 exemplos 
   desta 1^a^ _live_ e vamos realizar a análise completa para cada um:
