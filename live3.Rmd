@@ -13,7 +13,7 @@ output:
     toc: true
     slide_level: 2
     theme: Berkeley
-    colortheme: rose
+    colortheme: sidebartab
     fonttheme: structurebold
     highlight: haddock
 header-includes:
