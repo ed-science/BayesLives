@@ -198,7 +198,6 @@ informações sobre o contexto da situação
   - marketing digital
   - controle de qualidade
   - precificação
-  - ***AQUI***
 - os métodos cobrirão tipos diferentes de dados
   - respostas dummy, contagem e contínua
   - regressoras categóricas e quantitativas
@@ -1003,29 +1002,111 @@ dataset3 %>%
 
 ```{r ajusta3}
 if (file.exists("saida3_MCMCregr.Rds")) {
-  saida3_MCMCregr <- read_rds("saida3_MCMCregr.Rds")
+  # saida3_MCMCregr <- read_rds("saida3_MCMCregr.Rds")
+  saida3_runjags <- read_rds("saida3_runjags.Rds")
 } else {
-  # saida3_MCMCregr <- 
+  # saida3_MCMCregr <-
   #   MCMCpack::MCMCregress(
-  #     Price_euros ~ 
+  #     Price_euros ~
   #       Company +
   #       TypeName +
   #       Inches +
-  #       OpSys + 
-  #       PPI + 
-  #       Touchscreen + 
-  #       FreqCPU + 
-  #       CPUMaker + 
-  #       GPUMaker + 
-  #       Weight + 
-  #       Ram + 
-  #       HDD + 
-  #       SSD + 
-  #       Flash, 
-  #     dataset3, 
-  #     mcmc = 1e5 
+  #       OpSys +
+  #       PPI +
+  #       Touchscreen +
+  #       FreqCPU +
+  #       CPUMaker +
+  #       GPUMaker +
+  #       Weight +
+  #       Ram +
+  #       HDD +
+  #       SSD +
+  #       Flash,
+  #     data = dataset3,
+  #     b0 = 0,
+  #     B0 = 1e1,
+  #     sigma.mu = 1e1,
+  #     sigma.var = 1e2,
+  #     mcmc = 1e5
   #   )
   # write_rds(saida3_MCMCregr, "saida3_MCMCregr.Rds")
+  
+  modelo3 <- 
+"
+model {
+  # observações
+  for (i in 1:N) {
+    Price_euros[i] ~
+      dnorm(
+        alpha +
+        beta[1]  * Company[i] +
+        beta[2]  * TypeName[i] +
+        beta[3]  * Inches[i] +
+        beta[4]  * OpSys[i] +
+        beta[5]  * PPI[i] +
+        beta[6]  * Touchscreen[i] +
+        beta[7]  * FreqCPU[i] +
+        beta[8]  * CPUMaker[i] +
+        beta[9]  * GPUMaker[i] +
+        beta[10] * Weight[i] +
+        beta[11] * Ram[i] +
+        beta[12] * HDD[i] +
+        beta[13] * SSD[i] +
+        beta[14] * Flash[i],
+        sigma2)
+  }
+  # parâmetros
+  alpha ~ dnorm(0, 1e2)
+  for(j in 1:14) {
+    beta[j] ~ dnorm(0, 1e2)
+  }
+  sigma2 ~ dchisqr(1e2)
+}
+"
+
+dados3 <- 
+  with(
+    dataset3,
+    list(
+      N = nrow(dataset3),
+      Price_euros = Price_euros,
+      Company = Company,
+      TypeName = TypeName,
+      Inches = Inches,
+      OpSys = OpSys,
+      PPI = PPI,
+      Touchscreen = Touchscreen +0,
+      FreqCPU = FreqCPU,
+      CPUMaker = CPUMaker,
+      GPUMaker = GPUMaker,
+      Weight = Weight,
+      Ram = Ram,
+      HDD = HDD,
+      SSD = SSD,
+      Flash = Flash
+    )
+  )
+
+saida3_runjags <- 
+  runjags::run.jags(
+    model = modelo3,
+    data = dados3,
+    n.chains = 3, 
+    inits = 
+      function() {
+        list(
+          alpha = rnorm(1, 0, 1e2),
+          beta = rnorm(14, 0, 1e2),
+          sigma2 = rchisq(1, 1e2)
+        )
+      },
+    monitor = c("alpha", "beta", "sigma2"),
+    sample = 1e4
+  )
+  saida3_runjags
+  
+  # write_rds(saida3_MCMCregr, "saida3_MCMCregr.Rds")
+  write_rds(saida3_runjags, "saida3_runjags.Rds")
 }
 ```
 
