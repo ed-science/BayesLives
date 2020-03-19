@@ -318,12 +318,12 @@ dataset1 %>%
   ungroup() ->
   dataset1
 dataset1 %>% 
-  filter(acessos == 1) %>% 
-  with(table(group, landing_page)) %>% 
+  filter(acessos == 1) %$% 
+  table(group, landing_page) %>% 
   kable("pandoc")
 dataset1 %>% 
-  filter(acessos > 1) %>% 
-  with(table(group, landing_page)) %>% 
+  filter(acessos > 1) %$% 
+  table(group, landing_page) %>% 
   kable("pandoc")
 ```
 
@@ -361,12 +361,10 @@ de acessos únicos e, nesse caso, também não precisamos da variável `group`,
 ficando apenas com a regressora binária `landing_page`.
 
 ```{r dataset1_limpo}
-dataset1 %>% 
-  with(
-    table(
-      landing_page,
-      converted
-    )
+dataset1 %$% 
+  table(
+    landing_page,
+    converted
   ) %>% 
   kable(
     "pandoc", 
@@ -426,14 +424,12 @@ model {
         summarise(
           converted = sum(converted),
           N = n()
-        ) %>% 
-        with(
-          list(
-            converted.new_page = converted[1],
-            N.new_page = N[1],
-            converted.old_page = converted[2],
-            N.old_page = N[2]
-          )
+        ) %$% 
+        list(
+          converted.new_page = converted[1],
+          N.new_page = N[1],
+          converted.old_page = converted[2],
+          N.old_page = N[2]
         ), 
       inits = 
         list(
@@ -651,10 +647,10 @@ model {
       (gamma_L_M + gamma_M_H) * tension_H[i]
   }
 # usando prioris vagas
-  alpha_A_L ~ dnorm(0, 1e2)
-  beta_A_B ~ dnorm(0, 1e2)
-  gamma_L_M ~ dnorm(0, 1e2)
-  gamma_M_H ~ dnorm(0, 1e2)
+  alpha_A_L ~ dnorm(0, 1e-3)
+  beta_A_B  ~ dnorm(0, 1e-3)
+  gamma_L_M ~ dnorm(0, 1e-3)
+  gamma_M_H ~ dnorm(0, 1e-3)
 # valores de interesse
   lambda_A_L <- exp(alpha_A_L                                   )
   lambda_A_M <- exp(alpha_A_L            + gamma_L_M            )
@@ -668,15 +664,13 @@ model {
     runjags::run.jags(
       model = modelo2,
       data = 
-        with(
-          warpbreaks,
-          list(
-            N = nrow(warpbreaks),
-            breaks = breaks,
-            wool_B = (wool == "B") %>% as.integer(),
-            tension_M = (tension == "M") %>% as.integer(),
-            tension_H = (tension == "H") %>% as.integer()
-          )
+        warpbreaks %$%
+        list(
+          N = nrow(warpbreaks),
+          breaks = breaks,
+          wool_B = (wool == "B") %>% as.integer(),
+          tension_M = (tension == "M") %>% as.integer(),
+          tension_H = (tension == "H") %>% as.integer()
         ),
       inits = 
         list(
@@ -758,6 +752,8 @@ if (file.exists("saida2_MCMCpack.Rds")) {
     MCMCpack::MCMCpoisson(
       breaks ~ wool + tension, 
       data = warpbreaks, 
+      b0 = 0, 
+      B0 = 1e-3, 
       mcmc = 1e5
     )
   write_rds(saida2_MCMCpack, "saida2_MCMCpack.Rds")
@@ -864,8 +860,8 @@ Nope. Algo de errado não está certo!
 if (file.exists("dataset3.Rds")) {
   dataset3 <- read_rds("dataset3.Rds")
 } else {
-  dataset3 <- read_csv("conjuntos de dados/laptops.csv")
-  dataset3 %>% 
+  dataset3 <- 
+    read_csv("conjuntos de dados/laptops.csv") %>% 
     mutate(
       Resolution = ScreenResolution %>% str_extract("[0-9]*x[0-9]*"),
       Width_pixels = 
@@ -900,7 +896,8 @@ if (file.exists("dataset3.Rds")) {
         str_extract("[A-Za-z]*$"),
       WeightValue = 
         Weight %>% 
-        str_extract("^[0-9.]*"),
+        str_extract("^[0-9.]*") %>% 
+        as.numeric(),
       RamValue = 
         Ram %>% 
         str_extract("[0-9]*") %>% 
@@ -973,8 +970,27 @@ if (file.exists("dataset3.Rds")) {
       SSD = replace_na(SSD, 0),
       Flash = replace_na(Flash, 0)
     ) %>% 
-    mutate_if(is.character, as_factor) ->
-    dataset3
+    mutate_if(is.character, as_factor) %>% 
+    mutate(
+      OpSys = 
+        recode_factor(
+          OpSys,
+          `No OS`        = "NoOS",
+          macOS          = "MacOS",
+          `Mac OS X`     = "MacOS",
+          `Windows 10`   = "Windows10",
+          `Windows 10 S` = "Windows10"
+        ),
+      TypeName = 
+        recode_factor(
+          TypeName,
+            `2 in 1 Convertible` = "TwoInOne"
+        )
+    )
+  # dataset3 %>% str()
+  # dataset3 %>% summary()
+  # table(dataset3$OpSys)
+  # table(dataset3$TypeName)
   write_rds(dataset3, "dataset3.Rds")
 }
 ```
@@ -1002,89 +1018,140 @@ dataset3 %>%
 
 ```{r ajusta3}
 if (file.exists("saida3_MCMCregr.Rds")) {
+  saida3_lm <- read_rds("saida3_lm.Rds")
   # saida3_MCMCregr <- read_rds("saida3_MCMCregr.Rds")
   saida3_runjags <- read_rds("saida3_runjags.Rds")
 } else {
-  # saida3_MCMCregr <-
-  #   MCMCpack::MCMCregress(
-  #     Price_euros ~
-  #       Company +
-  #       TypeName +
-  #       Inches +
-  #       OpSys +
-  #       PPI +
-  #       Touchscreen +
-  #       FreqCPU +
-  #       CPUMaker +
-  #       GPUMaker +
-  #       Weight +
-  #       Ram +
-  #       HDD +
-  #       SSD +
-  #       Flash,
-  #     data = dataset3,
-  #     b0 = 0,
-  #     B0 = 1e1,
-  #     sigma.mu = 1e1,
-  #     sigma.var = 1e2,
-  #     mcmc = 1e5
-  #   )
-  # write_rds(saida3_MCMCregr, "saida3_MCMCregr.Rds")
+  saida3_lm <- 
+    dataset3 %$%
+    lm(
+      Price_euros ~
+        Company +
+        TypeName +
+        Inches +
+        OpSys +
+        PPI +
+        Touchscreen +
+        FreqCPU +
+        CPUMaker +
+        GPUMaker +
+        Weight +
+        Ram +
+        HDD +
+        SSD +
+        Flash
+    )
+  # saida3_lm
+  # saida3_lm %>% summary()
+  write_rds(saida3_lm, "saida3_lm.Rds")
+
+  ##
+  ##  Para rodar a análise bayesiana, vou precisar escrever a matriz de desenho 
+  ##  que lm() calcula automaticamente pra essas categóricas com 
+  ##  
+  ##  dataset3 %$% 
+  ##    model.matrix(~ Company + TypeName + OpSys + CPUMaker + GPUMaker)
+  ##
+  ##  se quiser interações de ordem 2 no futuro, vai ser
+  ##  
+  ##  dataset3 %$% 
+  ##    model.matrix(~ (Company + TypeName + OpSys + CPUMaker + GPUMaker)^2)
+  ##
+  
+
+  saida3_MCMCregr <-
+    MCMCpack::MCMCregress(
+      Price_euros ~
+        Company +
+        TypeName +
+        Inches +
+        OpSys +
+        PPI +
+        Touchscreen +
+        FreqCPU +
+        CPUMaker +
+        GPUMaker +
+        Weight +
+        Ram +
+        HDD +
+        SSD +
+        Flash,
+      data = dataset3,
+      b0 = 0,
+      B0 = 1e1,
+      sigma.mu = 1e1,
+      sigma.var = 1e2,
+      mcmc = 1e5
+    )
+  write_rds(saida3_MCMCregr, "saida3_MCMCregr.Rds")
   
   modelo3 <- 
 "
 model {
-  # observações
+  # verossimilhanças das observações
   for (i in 1:N) {
     Price_euros[i] ~
       dnorm(
         alpha +
-        beta[1]  * Company[i] +
-        beta[2]  * TypeName[i] +
-        beta[3]  * Inches[i] +
-        beta[4]  * OpSys[i] +
-        beta[5]  * PPI[i] +
-        beta[6]  * Touchscreen[i] +
-        beta[7]  * FreqCPU[i] +
-        beta[8]  * CPUMaker[i] +
-        beta[9]  * GPUMaker[i] +
-        beta[10] * Weight[i] +
-        beta[11] * Ram[i] +
-        beta[12] * HDD[i] +
-        beta[13] * SSD[i] +
-        beta[14] * Flash[i],
-        sigma2)
+          beta_Company     * Company[i] +
+          beta_TypeName    * TypeName[i] +
+          beta_Inches      * Inches[i] +
+          beta_OpSys       * OpSys[i] +
+          beta_PPI         * PPI[i] +
+          beta_Touchscreen * Touchscreen[i] +
+          beta_FreqCPU     * FreqCPU[i] +
+          beta_CPUMaker    * CPUMaker[i] +
+          beta_GPUMaker    * GPUMaker[i] +
+          beta_Weight      * Weight[i] +
+          beta_Ram         * Ram[i] +
+          beta_HDD         * HDD[i] +
+          beta_SSD         * SSD[i] +
+          beta_Flash       * Flash[i],
+        sigma2
+      )
   }
-  # parâmetros
-  alpha ~ dnorm(0, 1e2)
-  for(j in 1:14) {
-    beta[j] ~ dnorm(0, 1e2)
-  }
-  sigma2 ~ dchisqr(1e2)
+  # prioris dos parâmetros
+  alpha            ~ dnorm(0, 1e-3)
+  beta_Company     ~ dnorm(0, 1e-3)
+  beta_TypeName    ~ dnorm(0, 1e-3)
+  beta_Inches      ~ dnorm(0, 1e-3)
+  beta_OpSys       ~ dnorm(0, 1e-3)
+  beta_PPI         ~ dnorm(0, 1e-3)
+  beta_Touchscreen ~ dnorm(0, 1e-3)
+  beta_FreqCPU     ~ dnorm(0, 1e-3)
+  beta_CPUMaker    ~ dnorm(0, 1e-3)
+  beta_GPUMaker    ~ dnorm(0, 1e-3)
+  beta_Weight      ~ dnorm(0, 1e-3)
+  beta_Ram         ~ dnorm(0, 1e-3)
+  beta_HDD         ~ dnorm(0, 1e-3)
+  beta_SSD         ~ dnorm(0, 1e-3)
+  beta_Flash       ~ dnorm(0, 1e-3)
+  sigma2           ~ dchisqr(1e2)
 }
 "
 
+dataset3 %$%
+  model.matrix(~ Company + TypeName + OpSys + CPUMaker + GPUMaker)
+
 dados3 <- 
-  with(
-    dataset3,
-    list(
-      N = nrow(dataset3),
-      Price_euros = Price_euros,
-      Company = Company,
-      TypeName = TypeName,
-      Inches = Inches,
-      OpSys = OpSys,
-      PPI = PPI,
-      Touchscreen = Touchscreen +0,
-      FreqCPU = FreqCPU,
-      CPUMaker = CPUMaker,
-      GPUMaker = GPUMaker,
-      Weight = Weight,
-      Ram = Ram,
-      HDD = HDD,
-      SSD = SSD,
-      Flash = Flash
-    )
+  dataset3 %$%
+  list(
+    N = nrow(dataset3),
+    Price_euros = Price_euros,
+    Company = Company,
+    TypeName = TypeName,
+    Inches = Inches,
+    OpSys = OpSys,
+    PPI = PPI,
+    Touchscreen = Touchscreen +0,
+    FreqCPU = FreqCPU,
+    CPUMaker = CPUMaker,
+    GPUMaker = GPUMaker,
+    Weight = Weight,
+    Ram = Ram,
+    HDD = HDD,
+    SSD = SSD,
+    Flash = Flash
   )
 
 saida3_runjags <- 
@@ -1095,13 +1162,45 @@ saida3_runjags <-
     inits = 
       function() {
         list(
-          alpha = rnorm(1, 0, 1e2),
-          beta = rnorm(14, 0, 1e2),
-          sigma2 = rchisq(1, 1e2)
+          alpha            = rnorm(1, 0, 1e2),
+          beta_Company     = rnorm(1, 0, 1e2),
+          beta_TypeName    = rnorm(1, 0, 1e2),
+          beta_Inches      = rnorm(1, 0, 1e2),
+          beta_OpSys       = rnorm(1, 0, 1e2),
+          beta_PPI         = rnorm(1, 0, 1e2),
+          beta_Touchscreen = rnorm(1, 0, 1e2),
+          beta_FreqCPU     = rnorm(1, 0, 1e2),
+          beta_CPUMaker    = rnorm(1, 0, 1e2),
+          beta_GPUMaker    = rnorm(1, 0, 1e2),
+          beta_Weight      = rnorm(1, 0, 1e2),
+          beta_Ram         = rnorm(1, 0, 1e2),
+          beta_HDD         = rnorm(1, 0, 1e2),
+          beta_SSD         = rnorm(1, 0, 1e2),
+          beta_Flash       = rnorm(1, 0, 1e2),
+          sigma2           = rchisq(1, 1e2)
         )
       },
-    monitor = c("alpha", "beta", "sigma2"),
-    sample = 1e4
+    monitor = 
+      c(
+        "alpha", 
+        "beta_Company",
+        "beta_TypeName",
+        "beta_Inches",
+        "beta_OpSys",
+        "beta_PPI",
+        "beta_Touchscreen",
+        "beta_FreqCPU",
+        "beta_CPUMaker",
+        "beta_GPUMaker",
+        "beta_Weight",
+        "beta_Ram",
+        "beta_HDD",
+        "beta_SSD",
+        "beta_Flash",
+        "sigma2"
+      ),
+    sample = 1e4,
+    modules = c("glm on", "dic on")
   )
   saida3_runjags
   
